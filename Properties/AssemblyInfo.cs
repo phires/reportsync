@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ReportSync")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Sync SSRS report between two report servers")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("nunespascal")]
+[assembly: AssemblyCompany("Philipp Resch")]
 [assembly: AssemblyProduct("ReportSync")]
-[assembly: AssemblyCopyright("Copyright © Pascal Nunes 2011-2012")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Philipp Resch - Published under MIT license")]
+[assembly: AssemblyTrademark("Original Version Copyright © Pascal Nunes 2011-2012")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.*")]
-[assembly: AssemblyFileVersion("1.0.0.*")]
+[assembly: AssemblyVersion("1.1.0.*")]
+[assembly: AssemblyFileVersion("1.1.0.0")]

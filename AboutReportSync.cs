@@ -13,18 +13,17 @@ namespace ReportSync
         public AboutReportSync()
         {
             InitializeComponent();
-            this.Text = String.Format("About {0} ", AssemblyTitle);
+            Text = String.Format("About {0} ", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0} ", AssemblyVersion);
-            this.labelCompanyName.Text = "Author: nunespascal";
-            this.txtDescription.Text = @"Sync SSRS report between two report servers
+            this.labelCompanyName.Text = AssemblyCompany;
+            this.txtDescription.Text = AssemblyDescription + Environment.NewLine + AssemblyTrademark;
+        }
 
-    Download rdls from SSRS to local PC
-    Upload files to a SSRS server
-    Attach datasources automatically on upload
-    - Data source path given in the report must exist
-    - If not, you can map to an existing datasource
-    Attach subscriptions for the current user ";
+        public override sealed string Text
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
         }
 
         #region Assembly Attribute Accessors
@@ -33,16 +32,11 @@ namespace ReportSync
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-                if (attributes.Length > 0)
-                {
-                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
-                    if (titleAttribute.Title != "")
-                    {
-                        return titleAttribute.Title;
-                    }
-                }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                if (attributes.Length <= 0)
+                    return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                var titleAttribute = (AssemblyTitleAttribute)attributes[0];
+                return titleAttribute.Title != "" ? titleAttribute.Title : System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
             }
         }
 
@@ -58,12 +52,17 @@ namespace ReportSync
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return "";
-                }
-                return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+                return attributes.Length == 0 ? "" : ((AssemblyDescriptionAttribute)attributes[0]).Description;
+            }
+        }
+
+        public string AssemblyTrademark
+        {
+            get
+            {
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTrademarkAttribute), false);
+                return attributes.Length == 0 ? "" : ((AssemblyTrademarkAttribute)attributes[0]).Trademark;
             }
         }
 
@@ -71,12 +70,8 @@ namespace ReportSync
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return "";
-                }
-                return ((AssemblyProductAttribute)attributes[0]).Product;
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                return attributes.Length == 0 ? "" : ((AssemblyProductAttribute)attributes[0]).Product;
             }
         }
 
@@ -84,12 +79,8 @@ namespace ReportSync
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return "";
-                }
-                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                return attributes.Length == 0 ? "" : ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
             }
         }
 
@@ -97,12 +88,8 @@ namespace ReportSync
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return "";
-                }
-                return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                return attributes.Length == 0 ? "" : ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
         #endregion

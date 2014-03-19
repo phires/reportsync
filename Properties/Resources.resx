@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -114,4 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MSGBOX_LoadSouceAndDest" xml:space="preserve">
+    <value>Please load source and destination directories before you can map datasources.</value>
+  </data>
+  <data name="DatasourceNotLoaded" xml:space="preserve">
+    <value>Datasources not loaded</value>
+  </data>
+  <data name="Error_on_datasource" xml:space="preserve">
+    <value>Error on datasource</value>
+  </data>
+  <data name="Sync_completed_successfully" xml:space="preserve">
+    <value>Sync completed successfully.</value>
+  </data>
+  <data name="Sync_complete" xml:space="preserve">
+    <value>Sync complete</value>
+  </data>
+  <data name="Upload_completed_successfully" xml:space="preserve">
+    <value>Upload completed successfully.</value>
+  </data>
+  <data name="Upload_complete" xml:space="preserve">
+    <value>Upload complete</value>
+  </data>
+  <data name="Report_files_downloaded_successfully" xml:space="preserve">
+    <value>Report files downloaded successfully.</value>
+  </data>
+  <data name="Download_complete" xml:space="preserve">
+    <value>Download complete</value>
+  </data>
+  <data name="Download_failed" xml:space="preserve">
+    <value>Download failed : </value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Incorrect_source_user_name" xml:space="preserve">
+    <value>Incorrect source user name</value>
+  </data>
+  <data name="Loading_failed" xml:space="preserve">
+    <value>Loading failed.</value>
+  </data>
+  <data name="Incorrect_destination_user_name" xml:space="preserve">
+    <value>Incorrect destination user name</value>
+  </data>
+  <data name="Sync_failed" xml:space="preserve">
+    <value>Sync failed.</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload </value>
+  </data>
+  <data name="failed" xml:space="preserve">
+    <value> failed.</value>
+  </data>
+  <data name="Please_select_the_folder_to_upload" xml:space="preserve">
+    <value>Please select the folder to upload.</value>
+  </data>
 </root>

@@ -1,60 +1,55 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ReportSync.Properties;
 using ReportSync.ReportService;
 using System.Xml;
 using System.IO;
-using System.Web;
-using System.Threading;
 using System.Diagnostics;
 
 namespace ReportSync
 {
     public partial class ReportSync : Form
     {
-        const string ROOT_FOLDER = "/";
-        const string PATH_SEPERATOR = "/";
+        const string RootFolder = "/";
+        const string PathSeperator = "/";
+        const string SourceSelectionStart = "ReportSyncSource:";
+        const string DestSelectionStart = "ReportSyncDest:";
+        const string MappingStart = "ReportSyncMap:";
 
-        const string SOURCE_SELECTION_START = "ReportSyncSource:";
+        private ReportingService2005 _sourceRs;
+        private ReportingService2005 _destRs;
 
-        const string DEST_SELECTION_START = "ReportSyncDest:";
+        private Dictionary<string, string> _sourceDs;
+        private Dictionary<string, string> _destDs;
 
-        const string MAPPING_START = "ReportSyncMap:";
+        private string _pathOnDisk;
 
-        ReportingService2005 sourceRS;
-        ReportingService2005 destRS;
+        private string _uploadPath = RootFolder;
+        private List<string> _existingPaths;
 
-        Dictionary<string, string> sourceDS;
-        Dictionary<string, string> destDS;
+        private int _selectedNodeCount;
 
-        string pathOnDisk;
-
-        string uploadPath = ROOT_FOLDER;
-        List<string> existingPaths;
-
-        int selectedNodeCount;
-
-        int processedNodeCount;
+        private int _processedNodeCount;
 
         public ReportSync()
         {
             InitializeComponent();
-            bwDownload.DoWork += new DoWorkEventHandler(bwDownload_DoWork);
-            bwDownload.ProgressChanged += new ProgressChangedEventHandler(bwDownload_ProgressChanged);
-            bwDownload.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bwDownload_RunWorkerCompleted);
+            bwDownload.DoWork += bwDownload_DoWork;
+            bwDownload.ProgressChanged += bwDownload_ProgressChanged;
+            bwDownload.RunWorkerCompleted += bwDownload_RunWorkerCompleted;
 
-            bwUpload.DoWork += new DoWorkEventHandler(bwUpload_DoWork);
-            bwUpload.ProgressChanged +=new ProgressChangedEventHandler(bwUpload_ProgressChanged);
-            bwUpload.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bwUpload_RunWorkerCompleted);
+            bwUpload.DoWork += bwUpload_DoWork;
+            bwUpload.ProgressChanged +=bwUpload_ProgressChanged;
+            bwUpload.RunWorkerCompleted += bwUpload_RunWorkerCompleted;
 
-            bwSync.DoWork += new DoWorkEventHandler(bwSync_DoWork);
-            bwSync.ProgressChanged +=new ProgressChangedEventHandler(bwSync_ProgressChanged);
-            bwSync.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bwSync_RunWorkerCompleted);
+            bwSync.DoWork += bwSync_DoWork;
+            bwSync.ProgressChanged +=bwSync_ProgressChanged;
+            bwSync.RunWorkerCompleted += bwSync_RunWorkerCompleted;
         }
 
         void bwDownload_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -75,81 +70,77 @@ namespace ReportSync
 
         void bwSync_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            unCheckTreeNodes(rptSourceTree.Nodes);
-            loadDestTree();
-            MessageBox.Show("Sync completed successfully.", "Sync complete");
+            UnCheckTreeNodes(rptSourceTree.Nodes);
+            LoadDestTree();
+            MessageBox.Show(Resources.Sync_completed_successfully, Resources.Sync_complete);
         }
 
         void bwSync_DoWork(object sender, DoWorkEventArgs e)
         {
-            processedNodeCount = 0;
-            var destPath = ROOT_FOLDER;
-            if (!String.IsNullOrEmpty(uploadPath))
-                destPath = uploadPath;
-            syncTreeNodes(destPath, rptSourceTree.Nodes);
+            _processedNodeCount = 0;
+            var destPath = RootFolder;
+            if (!String.IsNullOrEmpty(_uploadPath))
+                destPath = _uploadPath;
+            SyncTreeNodes(destPath, rptSourceTree.Nodes);
             bwSync.ReportProgress(100);
         }
 
         void bwUpload_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            loadDestTree();
-            MessageBox.Show("Upload completed successfully.", "Upload complete");
+            LoadDestTree();
+            MessageBox.Show(Resources.Upload_completed_successfully, Resources.Upload_complete);
         }
 
         void bwUpload_DoWork(object sender, DoWorkEventArgs e)
         {
             var files = Directory.GetFiles(txtLocalPath.Text, "*.rdl", SearchOption.AllDirectories);
-            selectedNodeCount = files.Length;
-            processedNodeCount = 0;
+            _selectedNodeCount = files.Length;
+            _processedNodeCount = 0;
             foreach (var file in files)
             {
                 var fullPath = file.Replace(txtLocalPath.Text, "").TrimStart('\\');
-                int breakAt = fullPath.LastIndexOf('\\');
-                string filePath;
-                if (breakAt == -1)
-                    filePath = String.Empty;
-                else
-                    filePath = fullPath.Substring(0, breakAt).Replace("\\", PATH_SEPERATOR); ;
+                var breakAt = fullPath.LastIndexOf('\\');
+                var filePath = breakAt == -1 ? String.Empty : fullPath.Substring(0, breakAt).Replace("\\", PathSeperator); 
+
                 var fileName = fullPath.Substring(breakAt + 1, fullPath.Length - 5 - breakAt); //remove the .rdl
-                var reportPath = uploadPath;
-                if (reportPath.EndsWith(PATH_SEPERATOR))
+                var reportPath = _uploadPath;
+                if (reportPath.EndsWith(PathSeperator))
                     reportPath += filePath.TrimStart('/');
                 else
                     reportPath += "/" + filePath.TrimStart('/');
                 reportPath = reportPath.TrimEnd('/');
-                XmlDocument report = new XmlDocument();
+                var report = new XmlDocument();
                 report.Load(file);
                 var reportDef = Encoding.Default.GetBytes(report.OuterXml);
-                if (!existingPaths.Contains(reportPath))
+                if (!_existingPaths.Contains(reportPath))
                 {
                     EnsureDestDir(reportPath);
-                    existingPaths.Add(reportPath);
+                    _existingPaths.Add(reportPath);
                 }
-                uploadReport(reportPath, fileName, reportDef);
-                processedNodeCount++;
-                bwUpload.ReportProgress(processedNodeCount * 100 / selectedNodeCount);
+                UploadReport(reportPath, fileName, reportDef);
+                _processedNodeCount++;
+                bwUpload.ReportProgress(_processedNodeCount * 100 / _selectedNodeCount);
             }
             bwUpload.ReportProgress(100);
         }
 
         void bwDownload_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            unCheckTreeNodes(rptSourceTree.Nodes);
-            MessageBox.Show("Report files downloaded successfully.", "Download complete");
-
+            UnCheckTreeNodes(rptSourceTree.Nodes);
+            MessageBox.Show(Resources.Report_files_downloaded_successfully, Resources.Download_complete);
         }
 
         void bwDownload_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-                processedNodeCount = 0;
-                saveTreeNodes(rptSourceTree.Nodes);
+                _processedNodeCount = 0;
+                SaveTreeNodes(rptSourceTree.Nodes);
                 bwDownload.ReportProgress(100);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Download failed." + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.Download_failed + ex.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -157,14 +148,14 @@ namespace ReportSync
         {
             try
             {
-                sourceRS = new ReportService.ReportingService2005();
-                string reportServerURI = "http://localhost:8080/ReportServer";
+                _sourceRs = new ReportingService2005();
+                var reportServerUri = "http://localhost:8080/ReportServer";
                 if (!String.IsNullOrEmpty(txtSourceUrl.Text))
                 {
-                    reportServerURI = txtSourceUrl.Text;
+                    reportServerUri = txtSourceUrl.Text;
                 }
 
-                sourceRS.Url = reportServerURI + "/ReportService2005.asmx";
+                _sourceRs.Url = reportServerUri + "/ReportService2005.asmx";
 
                 if (!String.IsNullOrEmpty(txtSourceUser.Text))
                 {
@@ -172,44 +163,44 @@ namespace ReportSync
                     var nameParts = userName.Split('\\', '/');
                     if(nameParts.Length > 2)
                     {
-                        MessageBox.Show("Incorrect source user name", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Resources.Incorrect_source_user_name, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    else if (nameParts.Length == 2)
+                    if (nameParts.Length == 2)
                     {
                         userName = nameParts[1];
-                        sourceRS.Credentials = new System.Net.NetworkCredential(userName, txtSourcePassword.Text, nameParts[0]);
+                        _sourceRs.Credentials = new System.Net.NetworkCredential(userName, txtSourcePassword.Text, nameParts[0]);
                     }
                     else
                     {
-                        sourceRS.Credentials = new System.Net.NetworkCredential(userName, txtSourcePassword.Text);
-                    }                    
+                        _sourceRs.Credentials = new System.Net.NetworkCredential(userName, txtSourcePassword.Text);
+                    }
                 }
                 else
                 {
-                    sourceRS.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                    _sourceRs.Credentials = System.Net.CredentialCache.DefaultCredentials;
                 }
             
                 rptSourceTree.Nodes.Clear();
-                sourceDS = new Dictionary<string, string>();
-                loadTreeNode(ROOT_FOLDER, rptSourceTree.Nodes, sourceRS, sourceDS);
+                _sourceDs = new Dictionary<string, string>();
+                LoadTreeNode(RootFolder, rptSourceTree.Nodes, _sourceRs, _sourceDs);
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Loading failed." + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.Loading_failed + ex.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnDestLoad_Click(object sender, EventArgs e)
         {
-            destRS = new ReportService.ReportingService2005();
-            string reportServerURI = "http://localhost:8080/ReportServer";
+            _destRs = new ReportingService2005();
+            var reportServerUri = "http://localhost:8080/ReportServer";
             if (!String.IsNullOrEmpty(txtDestUrl.Text))
             {
-                reportServerURI = txtDestUrl.Text;
+                reportServerUri = txtDestUrl.Text;
             }
 
-            destRS.Url = reportServerURI + "/ReportService2005.asmx";
+            _destRs.Url = reportServerUri + "/ReportService2005.asmx";
 
             if (!String.IsNullOrEmpty(txtDestUser.Text))
             {
@@ -217,41 +208,39 @@ namespace ReportSync
                 var nameParts = userName.Split('\\', '/');
                 if (nameParts.Length > 2)
                 {
-                    MessageBox.Show("Incorrect destination user name","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Resources.Incorrect_destination_user_name,Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                else if (nameParts.Length == 2)
+                if (nameParts.Length == 2)
                 {
                     userName = nameParts[1];
-                    destRS.Credentials = new System.Net.NetworkCredential(userName, txtDestPassword.Text, nameParts[0]);
+                    _destRs.Credentials = new System.Net.NetworkCredential(userName, txtDestPassword.Text, nameParts[0]);
                 }
                 else
                 {
-                    destRS.Credentials = new System.Net.NetworkCredential(userName, txtDestPassword.Text);
+                    _destRs.Credentials = new System.Net.NetworkCredential(userName, txtDestPassword.Text);
                 }             
             }
             else
             {
-                destRS.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                _destRs.Credentials = System.Net.CredentialCache.DefaultCredentials;
             }
             try
             {
-                loadDestTree();
+                LoadDestTree();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Loading failed." + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.Loading_failed + ex.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void loadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs, Dictionary<string, string> dataSources)
+        private static void LoadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs, Dictionary<string, string> dataSources)
         {
-            CatalogItem[] items = rs.ListChildren(path, false);
+            var items = rs.ListChildren(path, false);
             foreach (var item in items)
             {
-                TreeNode t = new TreeNode();
-                t.Text = item.Name;
-                t.Name = item.Name;
+                var t = new TreeNode {Text = item.Name, Name = item.Name};
                 if (item.Type == ItemTypeEnum.DataSource)
                 {
                     if(!dataSources.ContainsKey(item.Name))
@@ -262,210 +251,197 @@ namespace ReportSync
                     nodes.Add(t);
                 }
                 if (item.Type == ItemTypeEnum.Folder)
-                    loadTreeNode(item.Path, t.Nodes, rs, dataSources);
-                else
-                {
-                    
-                }
+                    LoadTreeNode(item.Path, t.Nodes, rs, dataSources);
             }
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            selectedNodeCount = 0;
-            checkTreeNodes(rptSourceTree.Nodes, false);
+            _selectedNodeCount = 0;
+            CheckTreeNodes(rptSourceTree.Nodes, false);
             bwDownload.RunWorkerAsync();
         }
 
-        private bool checkTreeNodes(TreeNodeCollection nodes, bool parentChecked)
+        private bool CheckTreeNodes(IEnumerable nodes, bool parentChecked)
         {
             var isChecked = parentChecked;
             foreach (TreeNode node in nodes)
             {
                 if (node.Checked || parentChecked)
                 {
-                    checkTreeNodes(node.Nodes, true);
+                    CheckTreeNodes(node.Nodes, true);
                     node.Checked = true;
                     node.Tag = true;
                     isChecked = true;
-                    selectedNodeCount++;
+                    _selectedNodeCount++;
                 }
                 else
                 {
-                    node.Tag = checkTreeNodes(node.Nodes, false);
+                    node.Tag = CheckTreeNodes(node.Nodes, false);
                     isChecked = isChecked || (bool)node.Tag;
                 }
             }
             return isChecked;
         }
 
-        private void unCheckTreeNodes(TreeNodeCollection nodes)
+        private static void UnCheckTreeNodes(IEnumerable nodes)
         {
             foreach (TreeNode node in nodes)
             {
-                if (node.Tag != null)
+                if (node != null && node.Tag != null)
                 {
                     node.Tag = null;
                 }
-                unCheckTreeNodes(node.Nodes);
+                if (node != null) UnCheckTreeNodes(node.Nodes);
             }
         }
 
-        private void saveTreeNodes(TreeNodeCollection nodes)
+        private void SaveTreeNodes(IEnumerable nodes)
         {
             foreach (TreeNode node in nodes)
             {
                 var destPath = txtLocalPath.Text + "\\" + node.FullPath;
-                if (node.Checked)
+                if (!node.Checked) continue;
+
+                if (node.Nodes.Count > 0)
                 {
-                    if (node.Nodes.Count > 0)
-                    {
-                        //check if dir exists
-                        if (!Directory.Exists(destPath))
-                            Directory.CreateDirectory(destPath);
-                        saveTreeNodes(node.Nodes);
-                    }
-                    else
-                    {
-                        var itemPath = ROOT_FOLDER + node.FullPath.Replace("\\", "/");
-                        var itemType = sourceRS.GetItemType(itemPath);
-                        if (itemType == ItemTypeEnum.Resource)
-                        {
-                            //Download the resource
-                            string resourceType;
-                            var contents = sourceRS.GetResourceContents(itemPath, out resourceType);
-                            File.WriteAllBytes(destPath, contents);
-                            continue;
-                        }
-                        else if (itemType == ItemTypeEnum.Report || itemType == ItemTypeEnum.LinkedReport)
-                        {
-                            var reportDef = sourceRS.GetReportDefinition(itemPath);
-                            XmlDocument rdl = new XmlDocument();
-                            rdl.Load(new MemoryStream(reportDef));
-                            rdl.Save(destPath + ".rdl");
-                        }
-                    }
-                    processedNodeCount++;
-                    bwDownload.ReportProgress(processedNodeCount * 100 / selectedNodeCount);
+                    //check if dir exists
+                    if (!Directory.Exists(destPath))
+                        Directory.CreateDirectory(destPath);
+                    SaveTreeNodes(node.Nodes);
                 }
-                
+                else
+                {
+                    var itemPath = RootFolder + node.FullPath.Replace("\\", "/");
+                    var itemType = _sourceRs.GetItemType(itemPath);
+                    if (itemType == ItemTypeEnum.Resource)
+                    {
+                        //Download the resource
+                        string resourceType;
+                        var contents = _sourceRs.GetResourceContents(itemPath, out resourceType);
+                        File.WriteAllBytes(destPath, contents);
+                        continue;
+                    }
+                    if (itemType == ItemTypeEnum.Report || itemType == ItemTypeEnum.LinkedReport)
+                    {
+                        var reportDef = _sourceRs.GetReportDefinition(itemPath);
+                        var rdl = new XmlDocument();
+                        rdl.Load(new MemoryStream(reportDef));
+                        rdl.Save(destPath + ".rdl");
+                    }
+                }
+                _processedNodeCount++;
+                bwDownload.ReportProgress(_processedNodeCount * 100 / _selectedNodeCount);
             }
         }
 
-        private void loadDestTree()
+        private void LoadDestTree()
         {
-            uploadPath = ROOT_FOLDER;
+            _uploadPath = RootFolder;
             rptDestTree.Nodes.Clear();
-            destDS = new Dictionary<string, string>();
-            loadTreeNode(ROOT_FOLDER, rptDestTree.Nodes, destRS, destDS);
+            _destDs = new Dictionary<string, string>();
+            LoadTreeNode(RootFolder, rptDestTree.Nodes, _destRs, _destDs);
         }
 
         private void btnSync_Click(object sender, EventArgs e)
         {
             try
             {
-                selectedNodeCount = 0;
-                checkTreeNodes(rptSourceTree.Nodes, false);
-                existingPaths = new List<string>();
+                _selectedNodeCount = 0;
+                CheckTreeNodes(rptSourceTree.Nodes, false);
+                _existingPaths = new List<string>();
                 bwSync.RunWorkerAsync();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Sync failed." + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.Sync_failed + Environment.NewLine + ex.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void syncTreeNodes(string destPath, TreeNodeCollection nodes)
+        private void SyncTreeNodes(string destPath, IEnumerable nodes)
         {
-            foreach (TreeNode node in nodes)
+            foreach (var node in nodes.Cast<TreeNode>().Where(node => (bool) node.Tag))
             {
-                if ((bool)node.Tag)
+                if (node.Nodes.Count > 0)
                 {
-                    if (node.Nodes.Count > 0)
+                    var childPath = destPath;
+                    if (node.Checked)
                     {
-                        var childPath = destPath;
-                        if (node.Checked)
-                        {
-                            if (destPath.Equals(ROOT_FOLDER))
-                                childPath = ROOT_FOLDER + node.Text;
-                            else
-                                childPath = destPath + PATH_SEPERATOR + node.Text;
-                        }
-                        syncTreeNodes(childPath, node.Nodes);
+                        if (destPath.Equals(RootFolder))
+                            childPath = RootFolder + node.Text;
+                        else
+                            childPath = destPath + PathSeperator + node.Text;
                     }
-                    else
+                    SyncTreeNodes(childPath, node.Nodes);
+                }
+                else
+                {
+                    if (!_existingPaths.Contains(destPath))
                     {
-                        if (!existingPaths.Contains(destPath))
-                        {
-                            EnsureDestDir(destPath);
-                            existingPaths.Add(destPath);
-                        }
-                        var itemPath = ROOT_FOLDER + node.FullPath.Replace("\\", PATH_SEPERATOR);
-                        var itemType = sourceRS.GetItemType(itemPath);
-                        if (itemType == ItemTypeEnum.Resource)
-                        {
-                            //Download the resource
-                            string resourceType;
-                            var contents = sourceRS.GetResourceContents(itemPath, out resourceType);
-                            uploadResource(destPath, node.Text, resourceType, contents);
-                            processedNodeCount++;
-                            continue;
-                        }
-                        var reportDef = sourceRS.GetReportDefinition(itemPath);
-                        uploadReport(destPath, node.Text, reportDef);
+                        EnsureDestDir(destPath);
+                        _existingPaths.Add(destPath);
+                    }
+                    var itemPath = RootFolder + node.FullPath.Replace("\\", PathSeperator);
+                    var itemType = _sourceRs.GetItemType(itemPath);
+                    if (itemType == ItemTypeEnum.Resource)
+                    {
+                        //Download the resource
+                        string resourceType;
+                        var contents = _sourceRs.GetResourceContents(itemPath, out resourceType);
+                        UploadResource(destPath, node.Text, resourceType, contents);
+                        _processedNodeCount++;
+                        continue;
+                    }
+                    var reportDef = _sourceRs.GetReportDefinition(itemPath);
+                    UploadReport(destPath, node.Text, reportDef);
 
-                        //Sync subscriptions
+                    //Sync subscriptions
+
+                    var destReportPath = destPath;
+                    if (destReportPath.EndsWith("/"))
+                        destReportPath += node.Text;
+                    else
+                        destReportPath += "/" + node.Text;
+
+                    var subscriptions = _sourceRs.ListSubscriptions(itemPath, txtSourceUser.Text);
+                    foreach (var subscription in subscriptions)
+                    {
                         ExtensionSettings extSettings;
                         string desc;
                         ActiveState active;
                         string status;
                         string eventType;
                         string matchData;
-                        ParameterValue[] values = null;
-                        Subscription[] subscriptions = null;
-                        ParameterValueOrFieldReference[] extensionParams = null;
-
-                        var destReportPath = destPath;
-                        if (destReportPath.EndsWith("/"))
-                            destReportPath += node.Text;
-                        else
-                            destReportPath += "/" + node.Text;
-
-                        subscriptions = sourceRS.ListSubscriptions(itemPath, txtSourceUser.Text);
-                        foreach (var subscription in subscriptions)
+                        ParameterValue[] values;
+                        _sourceRs.GetSubscriptionProperties(subscription.SubscriptionID, out extSettings, out desc, out active, out status, out eventType, out matchData, out values);
+                        if (extSettings.Extension == "Report Server FileShare")
                         {
-                            sourceRS.GetSubscriptionProperties(subscription.SubscriptionID, out extSettings, out desc, out active, out status, out eventType, out matchData, out values);
-                            if (extSettings.Extension == "Report Server FileShare")
-                            {
-                                ParameterValue para = new ParameterValue();
-                                para.Name = "PASSWORD";
-                                para.Value = txtDestPassword.Text;
-                                ParameterValueOrFieldReference[] exParams = new ParameterValueOrFieldReference[extSettings.ParameterValues.Length + 1];
-                                Array.Copy(extSettings.ParameterValues, exParams, extSettings.ParameterValues.Length);
-                                exParams[extSettings.ParameterValues.Length] = para;
-                                extSettings.ParameterValues = exParams;
-                            }
-                            destRS.CreateSubscription(destReportPath, extSettings, desc, eventType, matchData, values);
+                            var para = new ParameterValue {Name = "PASSWORD", Value = txtDestPassword.Text};
+                            var exParams = new ParameterValueOrFieldReference[extSettings.ParameterValues.Length + 1];
+                            Array.Copy(extSettings.ParameterValues, exParams, extSettings.ParameterValues.Length);
+                            exParams[extSettings.ParameterValues.Length] = para;
+                            extSettings.ParameterValues = exParams;
                         }
+                        _destRs.CreateSubscription(destReportPath, extSettings, desc, eventType, matchData, values);
+                    }
 
-                        processedNodeCount++;
-                        bwSync.ReportProgress(processedNodeCount * 100 / selectedNodeCount);
-                    }                    
+                    _processedNodeCount++;
+                    bwSync.ReportProgress(_processedNodeCount * 100 / _selectedNodeCount);
                 }
             }
         }
 
-        private void uploadResource(string destinationPath, string resourceName, string resourceType, byte[] contents)
+        private void UploadResource(string destinationPath, string resourceName, string resourceType, byte[] contents)
         {
-            destRS.CreateResource(resourceName, destinationPath, true, contents, resourceType, null);
+            _destRs.CreateResource(resourceName, destinationPath, true, contents, resourceType, null);
         }
 
-        private void uploadReport(string destinationPath, string reportName, byte[] reportDef)
+        private void UploadReport(string destinationPath, string reportName, byte[] reportDef)
         {
             try
             {
                 //Create report
-                destRS.CreateReport(reportName, destinationPath, true, reportDef, null);
+                _destRs.CreateReport(reportName, destinationPath, true, reportDef, null);
 
                 //Link datasources
                 var reportPath = destinationPath;
@@ -473,32 +449,18 @@ namespace ReportSync
                     reportPath += reportName;
                 else
                     reportPath += "/" + reportName;
-                var reportDss = destRS.GetItemDataSources(reportPath);
-                List<DataSource> dataSources = new List<DataSource>();
-                foreach (var reportDs in reportDss)
-                {
-
-                    if (destDS.ContainsKey(reportDs.Name))
-                    {
-                        DataSourceReference reference = new DataSourceReference();
-                        reference.Reference = destDS[reportDs.Name];
-                        var ds = new DataSource();
-                        ds.Item = (DataSourceDefinitionOrReference)reference;
-                        ds.Name = reportDs.Name;
-                        dataSources.Add(ds);
-                    }
-                }
-                destRS.SetItemDataSources(reportPath, dataSources.ToArray());
+                var reportDss = _destRs.GetItemDataSources(reportPath);
+                _destRs.SetItemDataSources(reportPath, (from reportDs in reportDss where _destDs.ContainsKey(reportDs.Name) let reference = new DataSourceReference {Reference = _destDs[reportDs.Name]} select new DataSource {Item = reference, Name = reportDs.Name}).ToArray());
             }
             catch (Exception e)
             {
-                MessageBox.Show("Upload "+ reportName + " failed." + e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.Upload + reportName + Resources.failed + e.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnDest_Click(object sender, EventArgs e)
         {
-            DialogResult result = dlgDest.ShowDialog();
+            var result = dlgDest.ShowDialog();
             if (result == DialogResult.OK)
             {
                 txtLocalPath.Text = dlgDest.SelectedPath;
@@ -507,34 +469,34 @@ namespace ReportSync
 
         private void rptDestTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            uploadPath = ROOT_FOLDER + e.Node.FullPath.Replace("\\", PATH_SEPERATOR);
+            _uploadPath = RootFolder + e.Node.FullPath.Replace("\\", PathSeperator);
         }
 
         private void EnsureDestDir(string path)
         { 
             try
             {
-                destRS.ListChildren(path, false);
+                _destRs.ListChildren(path, false);
             }
             catch (Exception)
             { 
                 //ensure parent folder
-                var breatAt = path.LastIndexOf(PATH_SEPERATOR);
+                var breatAt = path.LastIndexOf(PathSeperator, StringComparison.Ordinal);
                 var folder = path.Substring(breatAt + 1);
                 var parent = path.Substring(0, breatAt);
                 if (String.IsNullOrEmpty(parent))
-                    parent = ROOT_FOLDER;
+                    parent = RootFolder;
                 EnsureDestDir(parent);
-                destRS.CreateFolder(folder,parent, null);
+                _destRs.CreateFolder(folder,parent, null);
             }
         }
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
-            existingPaths = new List<string>();
+            _existingPaths = new List<string>();
             if (String.IsNullOrEmpty(txtLocalPath.Text))
             {
-                MessageBox.Show("Please select the folder to upload.");
+                MessageBox.Show(Resources.Please_select_the_folder_to_upload);
                 return;
             }
             bwUpload.RunWorkerAsync();
@@ -543,10 +505,10 @@ namespace ReportSync
         private void ReportSync_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (!chkSaveSource.Checked)
-                Properties.Settings.Default.SourcePassword = "";
+                Settings.Default.SourcePassword = "";
             if (!chkSaveDest.Checked)
-                Properties.Settings.Default.DestPassword = "";
-            Properties.Settings.Default.Save();
+                Settings.Default.DestPassword = "";
+            Settings.Default.Save();
         }
 
         private void aboutReportSyncToolStripMenuItem_Click(object sender, EventArgs e)
@@ -562,83 +524,75 @@ namespace ReportSync
 
         private void mapDataSourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var frmMapDS = new MapDatasources();
-            frmMapDS.sourceDS = sourceDS;
-            frmMapDS.destDS = destDS;
-            var result = frmMapDS.ShowDialog();
+            var frmMapDs = new MapDatasources {SourceDs = _sourceDs, DestDs = _destDs};
+            frmMapDs.ShowDialog();
         }
 
         private void contentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://code.google.com/p/reportsync/wiki/");
+            Process.Start(@"https://github.com/dapaxx/reportsync");
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var res = dlgOpenFile.ShowDialog();
-            if (res == DialogResult.OK)
+            if (res != DialogResult.OK) return;
+
+            var data = File.ReadAllLines(dlgOpenFile.FileName);
+            var stage = 0;
+            foreach (var line in data)
             {
-                var data = File.ReadAllLines(dlgOpenFile.FileName);
-                int stage = 0;
-                foreach (var line in data)
+                switch (line)
                 {
-                    if (line == SOURCE_SELECTION_START)
-                    {
+                    case SourceSelectionStart:
                         stage = 1;
                         continue;
-                    }
-                    else if (line == DEST_SELECTION_START)
-                    {
+                    case DestSelectionStart:
                         stage = 2;
                         continue;
-                    }
-                    else if (line == MAPPING_START)
-                    {
+                    case MappingStart:
                         stage = 3;
                         continue;
-                    }
-                    switch (stage)
-                    { 
-                        case 1:
-                            checkNodeIfPathExists(rptSourceTree.Nodes, line);
-                            break;
-                        case 2:
-                            checkNodeIfPathExists(rptDestTree.Nodes, line);
-                            break;
-                        case 3:
-                            var entryParts = line.Split('=');
-                            if (entryParts.Length == 2 && destDS.ContainsKey(entryParts[0]))
-                                destDS[entryParts[0]] = entryParts[1];
-                            break;
-                    }
+                }
+                switch (stage)
+                { 
+                    case 1:
+                        CheckNodeIfPathExists(rptSourceTree.Nodes, line);
+                        break;
+                    case 2:
+                        CheckNodeIfPathExists(rptDestTree.Nodes, line);
+                        break;
+                    case 3:
+                        var entryParts = line.Split('=');
+                        if (entryParts.Length == 2 && _destDs.ContainsKey(entryParts[0]))
+                            _destDs[entryParts[0]] = entryParts[1];
+                        break;
                 }
             }
         }
 
-        void checkNodeIfPathExists(TreeNodeCollection nodes, string path)
+        static void CheckNodeIfPathExists(TreeNodeCollection nodes, string path)
         {
-            var parts = path.Split(new char[]{'\\'}, 2);
+            var parts = path.Split(new[]{'\\'}, 2);
             var key = parts[0];
-            if (nodes.ContainsKey(key))
+            if (!nodes.ContainsKey(key)) return;
+            if (parts.Length == 1)
+                nodes[key].Checked = true;
+            else
             {
-                if (parts.Length == 1)
-                    nodes[key].Checked = true;
-                else
-                {
-                    nodes[key].Expand();
-                    checkNodeIfPathExists(nodes[key].Nodes, parts[1]);
-                }
+                nodes[key].Expand();
+                CheckNodeIfPathExists(nodes[key].Nodes, parts[1]);
             }
         }
 
-        private string saveCheckedNodes(TreeNodeCollection nodes)
+        private static string SaveCheckedNodes(TreeNodeCollection nodes)
         {
             var data = "";
             foreach (TreeNode node in nodes)
             {
                 if (node.Checked)
                     data += node.FullPath + Environment.NewLine;
-                data += saveCheckedNodes(node.Nodes);
+                data += SaveCheckedNodes(node.Nodes);
             }
             return data;
         }
@@ -651,29 +605,24 @@ namespace ReportSync
         void SetPathAndSave()
         {
             var res = dlgSaveFile.ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                pathOnDisk = dlgSaveFile.FileName;
-                SaveSelectedNodesToDisk();
-            }
+            if (res != DialogResult.OK) return;
+            _pathOnDisk = dlgSaveFile.FileName;
+            SaveSelectedNodesToDisk();
         }
 
         void SaveSelectedNodesToDisk()
         {
-            if (!String.IsNullOrEmpty(pathOnDisk))
+            if (!String.IsNullOrEmpty(_pathOnDisk))
             {
                 // save tree to disk
-                string data = SOURCE_SELECTION_START + Environment.NewLine;
-                data += saveCheckedNodes(rptSourceTree.Nodes);
-                data += DEST_SELECTION_START + Environment.NewLine;
-                data += saveCheckedNodes(rptDestTree.Nodes);
-                data += MAPPING_START + Environment.NewLine;
+                var data = SourceSelectionStart + Environment.NewLine;
+                data += SaveCheckedNodes(rptSourceTree.Nodes);
+                data += DestSelectionStart + Environment.NewLine;
+                data += SaveCheckedNodes(rptDestTree.Nodes);
+                data += MappingStart + Environment.NewLine;
                 //save mapping
-                foreach (var entry in destDS)
-                {
-                    data += entry.Key + "=" + entry.Value + Environment.NewLine;
-                }
-                File.WriteAllText(pathOnDisk, data);
+                data = _destDs.Aggregate(data, (current, entry) => current + (entry.Key + "=" + entry.Value + Environment.NewLine));
+                File.WriteAllText(_pathOnDisk, data);
             }
             else
             {
