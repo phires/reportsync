@@ -171,4 +171,10 @@
   <data name="Please_select_the_folder_to_upload" xml:space="preserve">
     <value>Please select the folder to upload.</value>
   </data>
+  <data name="Getting_reports__please_wait" xml:space="preserve">
+    <value>Getting reports, please wait...</value>
+  </data>
+  <data name="Please_load_reports_from_both_source_and_destination_server" xml:space="preserve">
+    <value>Please load reports from both source and destination server.</value>
+  </data>
 </root>

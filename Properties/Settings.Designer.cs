@@ -47,7 +47,7 @@ namespace ReportSync.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Administrator")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SourceUser {
             get {
                 return ((string)(this["SourceUser"]));
@@ -95,7 +95,7 @@ namespace ReportSync.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Administrator")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DestUser {
             get {
                 return ((string)(this["DestUser"]));

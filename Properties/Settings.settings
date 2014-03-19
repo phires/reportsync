@@ -9,7 +9,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SourceUser" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Administrator</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SourcePassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -21,7 +21,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DestUser" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Administrator</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DestPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

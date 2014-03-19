@@ -29,42 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportSync));
-            this.btnSourceLoad = new System.Windows.Forms.Button();
-            this.rptSourceTree = new System.Windows.Forms.TreeView();
-            this.btnDownload = new System.Windows.Forms.Button();
             this.dlgDest = new System.Windows.Forms.FolderBrowserDialog();
-            this.btnDest = new System.Windows.Forms.Button();
-            this.btnDestLoad = new System.Windows.Forms.Button();
-            this.rptDestTree = new System.Windows.Forms.TreeView();
-            this.btnSync = new System.Windows.Forms.Button();
-            this.lblDestPass = new System.Windows.Forms.Label();
-            this.lblDestUser = new System.Windows.Forms.Label();
-            this.lblDestUrl = new System.Windows.Forms.Label();
-            this.grpSource = new System.Windows.Forms.GroupBox();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.lblSrcUrl = new System.Windows.Forms.Label();
-            this.chkSaveSource = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtSourcePassword = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtSourceUser = new System.Windows.Forms.TextBox();
-            this.txtSourceUrl = new System.Windows.Forms.TextBox();
-            this.pbSource = new System.Windows.Forms.ProgressBar();
-            this.grpDest = new System.Windows.Forms.GroupBox();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.chkSaveDest = new System.Windows.Forms.CheckBox();
-            this.txtDestUrl = new System.Windows.Forms.TextBox();
-            this.txtDestPassword = new System.Windows.Forms.TextBox();
-            this.txtDestUser = new System.Windows.Forms.TextBox();
-            this.pbDest = new System.Windows.Forms.ProgressBar();
-            this.lblDest = new System.Windows.Forms.Label();
-            this.btnUpload = new System.Windows.Forms.Button();
-            this.txtLocalPath = new System.Windows.Forms.TextBox();
             this.bwDownload = new System.ComponentModel.BackgroundWorker();
             this.bwUpload = new System.ComponentModel.BackgroundWorker();
             this.bwSync = new System.ComponentModel.BackgroundWorker();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,323 +48,64 @@
             this.aboutReportSyncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dlgSaveFile = new System.Windows.Forms.SaveFileDialog();
             this.dlgOpenFile = new System.Windows.Forms.OpenFileDialog();
-            this.grpSource.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.grpDest.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.bottomStrip = new System.Windows.Forms.StatusStrip();
+            this.bottomPanel = new System.Windows.Forms.Panel();
+            this.btnDest = new System.Windows.Forms.Button();
+            this.btnSync = new System.Windows.Forms.Button();
+            this.btnDownload = new System.Windows.Forms.Button();
+            this.lblDest = new System.Windows.Forms.Label();
+            this.txtLocalPath = new System.Windows.Forms.TextBox();
+            this.btnUpload = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.grpSource = new System.Windows.Forms.GroupBox();
+            this.rptSourceTree = new System.Windows.Forms.TreeView();
+            this.panelSource = new System.Windows.Forms.Panel();
+            this.btnSourceLoad = new System.Windows.Forms.Button();
+            this.tabSourceAuth = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbSourceIntegratedAuth = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbSourcePassword = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbSourceUser = new System.Windows.Forms.TextBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lblSrcUrl = new System.Windows.Forms.Label();
+            this.chkSaveSource = new System.Windows.Forms.CheckBox();
+            this.txtSourceUrl = new System.Windows.Forms.TextBox();
+            this.pbSource = new System.Windows.Forms.ProgressBar();
+            this.grpDest = new System.Windows.Forms.GroupBox();
+            this.rptDestTree = new System.Windows.Forms.TreeView();
+            this.pnlDestSettings = new System.Windows.Forms.Panel();
+            this.lblDestUrl = new System.Windows.Forms.Label();
+            this.chkSaveDest = new System.Windows.Forms.CheckBox();
+            this.btnDestLoad = new System.Windows.Forms.Button();
+            this.txtDestUrl = new System.Windows.Forms.TextBox();
+            this.pbDest = new System.Windows.Forms.ProgressBar();
+            this.tabDestSettings = new System.Windows.Forms.TabControl();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.cbDestIntegratedAuth = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbDestPassword = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbDestUser = new System.Windows.Forms.TextBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.currentStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuStrip1.SuspendLayout();
+            this.bottomStrip.SuspendLayout();
+            this.bottomPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.grpSource.SuspendLayout();
+            this.panelSource.SuspendLayout();
+            this.tabSourceAuth.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.grpDest.SuspendLayout();
+            this.pnlDestSettings.SuspendLayout();
+            this.tabDestSettings.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnSourceLoad
-            // 
-            this.btnSourceLoad.Location = new System.Drawing.Point(173, 55);
-            this.btnSourceLoad.Name = "btnSourceLoad";
-            this.btnSourceLoad.Size = new System.Drawing.Size(55, 20);
-            this.btnSourceLoad.TabIndex = 4;
-            this.btnSourceLoad.Text = "Load";
-            this.btnSourceLoad.UseVisualStyleBackColor = true;
-            this.btnSourceLoad.Click += new System.EventHandler(this.btnLoad_Click);
-            // 
-            // rptSourceTree
-            // 
-            this.rptSourceTree.CheckBoxes = true;
-            this.rptSourceTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rptSourceTree.Location = new System.Drawing.Point(3, 101);
-            this.rptSourceTree.Name = "rptSourceTree";
-            this.rptSourceTree.Size = new System.Drawing.Size(232, 331);
-            this.rptSourceTree.TabIndex = 5;
-            // 
-            // btnDownload
-            // 
-            this.btnDownload.Location = new System.Drawing.Point(307, 6);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(65, 21);
-            this.btnDownload.TabIndex = 7;
-            this.btnDownload.Text = "Download";
-            this.btnDownload.UseVisualStyleBackColor = true;
-            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
-            // 
-            // btnDest
-            // 
-            this.btnDest.Location = new System.Drawing.Point(274, 6);
-            this.btnDest.Name = "btnDest";
-            this.btnDest.Size = new System.Drawing.Size(24, 21);
-            this.btnDest.TabIndex = 6;
-            this.btnDest.Text = "...";
-            this.btnDest.UseVisualStyleBackColor = true;
-            this.btnDest.Click += new System.EventHandler(this.btnDest_Click);
-            // 
-            // btnDestLoad
-            // 
-            this.btnDestLoad.Location = new System.Drawing.Point(170, 55);
-            this.btnDestLoad.Name = "btnDestLoad";
-            this.btnDestLoad.Size = new System.Drawing.Size(57, 20);
-            this.btnDestLoad.TabIndex = 11;
-            this.btnDestLoad.Text = "Load";
-            this.btnDestLoad.UseVisualStyleBackColor = true;
-            this.btnDestLoad.Click += new System.EventHandler(this.btnDestLoad_Click);
-            // 
-            // rptDestTree
-            // 
-            this.rptDestTree.CheckBoxes = true;
-            this.rptDestTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rptDestTree.Location = new System.Drawing.Point(3, 101);
-            this.rptDestTree.Name = "rptDestTree";
-            this.rptDestTree.Size = new System.Drawing.Size(232, 331);
-            this.rptDestTree.TabIndex = 13;
-            this.rptDestTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rptDestTree_NodeMouseClick);
-            // 
-            // btnSync
-            // 
-            this.btnSync.Location = new System.Drawing.Point(439, 6);
-            this.btnSync.Name = "btnSync";
-            this.btnSync.Size = new System.Drawing.Size(41, 21);
-            this.btnSync.TabIndex = 13;
-            this.btnSync.Text = "&Sync";
-            this.btnSync.UseVisualStyleBackColor = true;
-            this.btnSync.Click += new System.EventHandler(this.btnSync_Click);
-            // 
-            // lblDestPass
-            // 
-            this.lblDestPass.AutoSize = true;
-            this.lblDestPass.Location = new System.Drawing.Point(3, 59);
-            this.lblDestPass.Name = "lblDestPass";
-            this.lblDestPass.Size = new System.Drawing.Size(53, 13);
-            this.lblDestPass.TabIndex = 16;
-            this.lblDestPass.Text = "Password";
-            // 
-            // lblDestUser
-            // 
-            this.lblDestUser.AutoSize = true;
-            this.lblDestUser.Location = new System.Drawing.Point(3, 33);
-            this.lblDestUser.Name = "lblDestUser";
-            this.lblDestUser.Size = new System.Drawing.Size(29, 13);
-            this.lblDestUser.TabIndex = 17;
-            this.lblDestUser.Text = "User";
-            // 
-            // lblDestUrl
-            // 
-            this.lblDestUrl.AutoSize = true;
-            this.lblDestUrl.Location = new System.Drawing.Point(3, 7);
-            this.lblDestUrl.Name = "lblDestUrl";
-            this.lblDestUrl.Size = new System.Drawing.Size(20, 13);
-            this.lblDestUrl.TabIndex = 18;
-            this.lblDestUrl.Text = "Url";
-            // 
-            // grpSource
-            // 
-            this.grpSource.Controls.Add(this.rptSourceTree);
-            this.grpSource.Controls.Add(this.panel2);
-            this.grpSource.Controls.Add(this.pbSource);
-            this.grpSource.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSource.Location = new System.Drawing.Point(0, 0);
-            this.grpSource.Name = "grpSource";
-            this.grpSource.Size = new System.Drawing.Size(238, 458);
-            this.grpSource.TabIndex = 19;
-            this.grpSource.TabStop = false;
-            this.grpSource.Text = "Source SSRS web service";
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.lblSrcUrl);
-            this.panel2.Controls.Add(this.chkSaveSource);
-            this.panel2.Controls.Add(this.btnSourceLoad);
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.txtSourcePassword);
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.txtSourceUser);
-            this.panel2.Controls.Add(this.txtSourceUrl);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(3, 16);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(232, 85);
-            this.panel2.TabIndex = 23;
-            // 
-            // lblSrcUrl
-            // 
-            this.lblSrcUrl.AutoSize = true;
-            this.lblSrcUrl.Location = new System.Drawing.Point(6, 7);
-            this.lblSrcUrl.Name = "lblSrcUrl";
-            this.lblSrcUrl.Size = new System.Drawing.Size(20, 13);
-            this.lblSrcUrl.TabIndex = 19;
-            this.lblSrcUrl.Text = "Url";
-            // 
-            // chkSaveSource
-            // 
-            this.chkSaveSource.AutoSize = true;
-            this.chkSaveSource.Checked = true;
-            this.chkSaveSource.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSaveSource.Location = new System.Drawing.Point(174, 32);
-            this.chkSaveSource.Name = "chkSaveSource";
-            this.chkSaveSource.Size = new System.Drawing.Size(51, 17);
-            this.chkSaveSource.TabIndex = 22;
-            this.chkSaveSource.Text = "Save";
-            this.chkSaveSource.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 13);
-            this.label2.TabIndex = 21;
-            this.label2.Text = "Password";
-            // 
-            // txtSourcePassword
-            // 
-            this.txtSourcePassword.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourcePassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtSourcePassword.Location = new System.Drawing.Point(67, 55);
-            this.txtSourcePassword.Name = "txtSourcePassword";
-            this.txtSourcePassword.PasswordChar = '*';
-            this.txtSourcePassword.Size = new System.Drawing.Size(100, 20);
-            this.txtSourcePassword.TabIndex = 3;
-            this.txtSourcePassword.Text = global::ReportSync.Properties.Settings.Default.SourcePassword;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 32);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "User";
-            // 
-            // txtSourceUser
-            // 
-            this.txtSourceUser.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourceUser", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtSourceUser.Location = new System.Drawing.Point(67, 29);
-            this.txtSourceUser.Name = "txtSourceUser";
-            this.txtSourceUser.Size = new System.Drawing.Size(100, 20);
-            this.txtSourceUser.TabIndex = 2;
-            this.txtSourceUser.Text = global::ReportSync.Properties.Settings.Default.SourceUser;
-            // 
-            // txtSourceUrl
-            // 
-            this.txtSourceUrl.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourceUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtSourceUrl.Location = new System.Drawing.Point(35, 4);
-            this.txtSourceUrl.Name = "txtSourceUrl";
-            this.txtSourceUrl.Size = new System.Drawing.Size(193, 20);
-            this.txtSourceUrl.TabIndex = 1;
-            this.txtSourceUrl.Text = global::ReportSync.Properties.Settings.Default.SourceUrl;
-            // 
-            // pbSource
-            // 
-            this.pbSource.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pbSource.Location = new System.Drawing.Point(3, 432);
-            this.pbSource.Name = "pbSource";
-            this.pbSource.Size = new System.Drawing.Size(232, 23);
-            this.pbSource.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.pbSource.TabIndex = 22;
-            // 
-            // grpDest
-            // 
-            this.grpDest.Controls.Add(this.rptDestTree);
-            this.grpDest.Controls.Add(this.panel3);
-            this.grpDest.Controls.Add(this.pbDest);
-            this.grpDest.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpDest.Location = new System.Drawing.Point(0, 0);
-            this.grpDest.Name = "grpDest";
-            this.grpDest.Size = new System.Drawing.Size(238, 458);
-            this.grpDest.TabIndex = 20;
-            this.grpDest.TabStop = false;
-            this.grpDest.Text = "Destination SSRS web service";
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.lblDestUrl);
-            this.panel3.Controls.Add(this.chkSaveDest);
-            this.panel3.Controls.Add(this.btnDestLoad);
-            this.panel3.Controls.Add(this.lblDestPass);
-            this.panel3.Controls.Add(this.txtDestUrl);
-            this.panel3.Controls.Add(this.txtDestPassword);
-            this.panel3.Controls.Add(this.txtDestUser);
-            this.panel3.Controls.Add(this.lblDestUser);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(3, 16);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(232, 85);
-            this.panel3.TabIndex = 24;
-            // 
-            // chkSaveDest
-            // 
-            this.chkSaveDest.AutoSize = true;
-            this.chkSaveDest.Checked = true;
-            this.chkSaveDest.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSaveDest.Location = new System.Drawing.Point(174, 32);
-            this.chkSaveDest.Name = "chkSaveDest";
-            this.chkSaveDest.Size = new System.Drawing.Size(51, 17);
-            this.chkSaveDest.TabIndex = 22;
-            this.chkSaveDest.Text = "Save";
-            this.chkSaveDest.UseVisualStyleBackColor = true;
-            // 
-            // txtDestUrl
-            // 
-            this.txtDestUrl.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "DestUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtDestUrl.Location = new System.Drawing.Point(27, 4);
-            this.txtDestUrl.Name = "txtDestUrl";
-            this.txtDestUrl.Size = new System.Drawing.Size(200, 20);
-            this.txtDestUrl.TabIndex = 8;
-            this.txtDestUrl.Text = global::ReportSync.Properties.Settings.Default.DestUrl;
-            // 
-            // txtDestPassword
-            // 
-            this.txtDestPassword.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "DestPassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtDestPassword.Location = new System.Drawing.Point(65, 55);
-            this.txtDestPassword.Name = "txtDestPassword";
-            this.txtDestPassword.PasswordChar = '*';
-            this.txtDestPassword.Size = new System.Drawing.Size(100, 20);
-            this.txtDestPassword.TabIndex = 10;
-            this.txtDestPassword.Text = global::ReportSync.Properties.Settings.Default.DestPassword;
-            // 
-            // txtDestUser
-            // 
-            this.txtDestUser.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "DestUser", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtDestUser.Location = new System.Drawing.Point(65, 30);
-            this.txtDestUser.Name = "txtDestUser";
-            this.txtDestUser.Size = new System.Drawing.Size(100, 20);
-            this.txtDestUser.TabIndex = 9;
-            this.txtDestUser.Text = global::ReportSync.Properties.Settings.Default.DestUser;
-            // 
-            // pbDest
-            // 
-            this.pbDest.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pbDest.Location = new System.Drawing.Point(3, 432);
-            this.pbDest.Name = "pbDest";
-            this.pbDest.Size = new System.Drawing.Size(232, 23);
-            this.pbDest.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.pbDest.TabIndex = 23;
-            // 
-            // lblDest
-            // 
-            this.lblDest.AutoSize = true;
-            this.lblDest.Location = new System.Drawing.Point(7, 9);
-            this.lblDest.Name = "lblDest";
-            this.lblDest.Size = new System.Drawing.Size(57, 13);
-            this.lblDest.TabIndex = 21;
-            this.lblDest.Text = "Local path";
-            // 
-            // btnUpload
-            // 
-            this.btnUpload.Location = new System.Drawing.Point(378, 6);
-            this.btnUpload.Name = "btnUpload";
-            this.btnUpload.Size = new System.Drawing.Size(55, 21);
-            this.btnUpload.TabIndex = 12;
-            this.btnUpload.Text = "Upload";
-            this.btnUpload.UseVisualStyleBackColor = true;
-            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
-            // 
-            // txtLocalPath
-            // 
-            this.txtLocalPath.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "LocalPath", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtLocalPath.Location = new System.Drawing.Point(68, 6);
-            this.txtLocalPath.Name = "txtLocalPath";
-            this.txtLocalPath.Size = new System.Drawing.Size(197, 20);
-            this.txtLocalPath.TabIndex = 5;
-            this.txtLocalPath.Text = global::ReportSync.Properties.Settings.Default.LocalPath;
             // 
             // bwDownload
             // 
@@ -410,37 +119,6 @@
             // 
             this.bwSync.WorkerReportsProgress = true;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnUpload);
-            this.panel1.Controls.Add(this.txtLocalPath);
-            this.panel1.Controls.Add(this.lblDest);
-            this.panel1.Controls.Add(this.btnDownload);
-            this.panel1.Controls.Add(this.btnSync);
-            this.panel1.Controls.Add(this.btnDest);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 482);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(480, 36);
-            this.panel1.TabIndex = 22;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.grpSource);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.grpDest);
-            this.splitContainer1.Size = new System.Drawing.Size(480, 458);
-            this.splitContainer1.SplitterDistance = 238;
-            this.splitContainer1.TabIndex = 23;
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -449,7 +127,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(480, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(758, 24);
             this.menuStrip1.TabIndex = 24;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -463,44 +141,44 @@
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(111, 6);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -509,13 +187,13 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mapDataSourcesToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // mapDataSourcesToolStripMenuItem
             // 
             this.mapDataSourcesToolStripMenuItem.Name = "mapDataSourcesToolStripMenuItem";
-            this.mapDataSourcesToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.mapDataSourcesToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.mapDataSourcesToolStripMenuItem.Text = "Map DataSources";
             this.mapDataSourcesToolStripMenuItem.Click += new System.EventHandler(this.mapDataSourcesToolStripMenuItem_Click);
             // 
@@ -525,21 +203,21 @@
             this.contentsToolStripMenuItem,
             this.aboutReportSyncToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // contentsToolStripMenuItem
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.contentsToolStripMenuItem.Text = "Contents (Online)";
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
             // 
             // aboutReportSyncToolStripMenuItem
             // 
             this.aboutReportSyncToolStripMenuItem.Name = "aboutReportSyncToolStripMenuItem";
-            this.aboutReportSyncToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.aboutReportSyncToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.aboutReportSyncToolStripMenuItem.Text = "About ReportSync";
             this.aboutReportSyncToolStripMenuItem.Click += new System.EventHandler(this.aboutReportSyncToolStripMenuItem_Click);
             // 
@@ -555,32 +233,516 @@
             this.dlgOpenFile.Filter = "ReportSync Files | *.rsn";
             this.dlgOpenFile.Title = "Open ReportSync file";
             // 
+            // bottomStrip
+            // 
+            this.bottomStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.currentStatus});
+            this.bottomStrip.Location = new System.Drawing.Point(0, 451);
+            this.bottomStrip.Name = "bottomStrip";
+            this.bottomStrip.Size = new System.Drawing.Size(758, 22);
+            this.bottomStrip.TabIndex = 25;
+            this.bottomStrip.Text = "statusStrip1";
+            // 
+            // bottomPanel
+            // 
+            this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomPanel.Controls.Add(this.btnUpload);
+            this.bottomPanel.Controls.Add(this.txtLocalPath);
+            this.bottomPanel.Controls.Add(this.lblDest);
+            this.bottomPanel.Controls.Add(this.btnDownload);
+            this.bottomPanel.Controls.Add(this.btnSync);
+            this.bottomPanel.Controls.Add(this.btnDest);
+            this.bottomPanel.Location = new System.Drawing.Point(0, 418);
+            this.bottomPanel.Name = "bottomPanel";
+            this.bottomPanel.Size = new System.Drawing.Size(758, 36);
+            this.bottomPanel.TabIndex = 22;
+            // 
+            // btnDest
+            // 
+            this.btnDest.Location = new System.Drawing.Point(274, 6);
+            this.btnDest.Name = "btnDest";
+            this.btnDest.Size = new System.Drawing.Size(24, 21);
+            this.btnDest.TabIndex = 6;
+            this.btnDest.Text = "...";
+            this.btnDest.UseVisualStyleBackColor = true;
+            this.btnDest.Click += new System.EventHandler(this.btnDest_Click);
+            // 
+            // btnSync
+            // 
+            this.btnSync.Location = new System.Drawing.Point(439, 6);
+            this.btnSync.Name = "btnSync";
+            this.btnSync.Size = new System.Drawing.Size(41, 21);
+            this.btnSync.TabIndex = 13;
+            this.btnSync.Text = "&Sync";
+            this.btnSync.UseVisualStyleBackColor = true;
+            this.btnSync.Click += new System.EventHandler(this.btnSync_Click);
+            // 
+            // btnDownload
+            // 
+            this.btnDownload.Location = new System.Drawing.Point(307, 6);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(65, 21);
+            this.btnDownload.TabIndex = 7;
+            this.btnDownload.Text = "Download";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
+            // 
+            // lblDest
+            // 
+            this.lblDest.AutoSize = true;
+            this.lblDest.Location = new System.Drawing.Point(7, 9);
+            this.lblDest.Name = "lblDest";
+            this.lblDest.Size = new System.Drawing.Size(57, 13);
+            this.lblDest.TabIndex = 21;
+            this.lblDest.Text = "Local path";
+            // 
+            // txtLocalPath
+            // 
+            this.txtLocalPath.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "LocalPath", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtLocalPath.Location = new System.Drawing.Point(68, 6);
+            this.txtLocalPath.Name = "txtLocalPath";
+            this.txtLocalPath.Size = new System.Drawing.Size(197, 20);
+            this.txtLocalPath.TabIndex = 5;
+            this.txtLocalPath.Text = global::ReportSync.Properties.Settings.Default.LocalPath;
+            // 
+            // btnUpload
+            // 
+            this.btnUpload.Location = new System.Drawing.Point(378, 6);
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.Size = new System.Drawing.Size(55, 21);
+            this.btnUpload.TabIndex = 12;
+            this.btnUpload.Text = "Upload";
+            this.btnUpload.UseVisualStyleBackColor = true;
+            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(0, 27);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.grpSource);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.grpDest);
+            this.splitContainer1.Size = new System.Drawing.Size(758, 388);
+            this.splitContainer1.SplitterDistance = 380;
+            this.splitContainer1.TabIndex = 28;
+            // 
+            // grpSource
+            // 
+            this.grpSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpSource.Controls.Add(this.rptSourceTree);
+            this.grpSource.Controls.Add(this.panelSource);
+            this.grpSource.Controls.Add(this.pbSource);
+            this.grpSource.Location = new System.Drawing.Point(3, 3);
+            this.grpSource.Name = "grpSource";
+            this.grpSource.Size = new System.Drawing.Size(373, 382);
+            this.grpSource.TabIndex = 30;
+            this.grpSource.TabStop = false;
+            this.grpSource.Text = "Source SSRS web service";
+            // 
+            // rptSourceTree
+            // 
+            this.rptSourceTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rptSourceTree.CheckBoxes = true;
+            this.rptSourceTree.Location = new System.Drawing.Point(12, 205);
+            this.rptSourceTree.Name = "rptSourceTree";
+            this.rptSourceTree.Size = new System.Drawing.Size(348, 145);
+            this.rptSourceTree.TabIndex = 5;
+            // 
+            // panelSource
+            // 
+            this.panelSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelSource.Controls.Add(this.btnSourceLoad);
+            this.panelSource.Controls.Add(this.tabSourceAuth);
+            this.panelSource.Controls.Add(this.lblSrcUrl);
+            this.panelSource.Controls.Add(this.chkSaveSource);
+            this.panelSource.Controls.Add(this.txtSourceUrl);
+            this.panelSource.Location = new System.Drawing.Point(4, 16);
+            this.panelSource.Name = "panelSource";
+            this.panelSource.Size = new System.Drawing.Size(358, 183);
+            this.panelSource.TabIndex = 23;
+            // 
+            // btnSourceLoad
+            // 
+            this.btnSourceLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSourceLoad.Location = new System.Drawing.Point(300, 160);
+            this.btnSourceLoad.Name = "btnSourceLoad";
+            this.btnSourceLoad.Size = new System.Drawing.Size(55, 20);
+            this.btnSourceLoad.TabIndex = 24;
+            this.btnSourceLoad.Text = "Load";
+            this.btnSourceLoad.UseVisualStyleBackColor = true;
+            this.btnSourceLoad.Click += new System.EventHandler(this.btnSourceLoad_Click);
+            // 
+            // tabSourceAuth
+            // 
+            this.tabSourceAuth.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabSourceAuth.Controls.Add(this.tabPage1);
+            this.tabSourceAuth.Controls.Add(this.tabPage2);
+            this.tabSourceAuth.Location = new System.Drawing.Point(3, 30);
+            this.tabSourceAuth.Name = "tabSourceAuth";
+            this.tabSourceAuth.SelectedIndex = 0;
+            this.tabSourceAuth.Size = new System.Drawing.Size(352, 123);
+            this.tabSourceAuth.TabIndex = 23;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.cbSourceIntegratedAuth);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.tbSourcePassword);
+            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.tbSourceUser);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(344, 97);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Authentication";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // cbSourceIntegratedAuth
+            // 
+            this.cbSourceIntegratedAuth.AutoSize = true;
+            this.cbSourceIntegratedAuth.Location = new System.Drawing.Point(9, 53);
+            this.cbSourceIntegratedAuth.Name = "cbSourceIntegratedAuth";
+            this.cbSourceIntegratedAuth.Size = new System.Drawing.Size(164, 17);
+            this.cbSourceIntegratedAuth.TabIndex = 26;
+            this.cbSourceIntegratedAuth.Text = "Use Integated Authentication";
+            this.cbSourceIntegratedAuth.UseVisualStyleBackColor = true;
+            this.cbSourceIntegratedAuth.CheckedChanged += new System.EventHandler(this.cbSourceIntegratedAuth_CheckedChanged_1);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.TabIndex = 25;
+            this.label2.Text = "Password";
+            // 
+            // tbSourcePassword
+            // 
+            this.tbSourcePassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSourcePassword.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourcePassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.tbSourcePassword.Location = new System.Drawing.Point(77, 27);
+            this.tbSourcePassword.Name = "tbSourcePassword";
+            this.tbSourcePassword.PasswordChar = '*';
+            this.tbSourcePassword.Size = new System.Drawing.Size(260, 20);
+            this.tbSourcePassword.TabIndex = 23;
+            this.tbSourcePassword.Text = global::ReportSync.Properties.Settings.Default.SourcePassword;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "User";
+            // 
+            // tbSourceUser
+            // 
+            this.tbSourceUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSourceUser.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourceUser", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.tbSourceUser.Location = new System.Drawing.Point(77, 4);
+            this.tbSourceUser.Name = "tbSourceUser";
+            this.tbSourceUser.Size = new System.Drawing.Size(260, 20);
+            this.tbSourceUser.TabIndex = 22;
+            this.tbSourceUser.Text = global::ReportSync.Properties.Settings.Default.SourceUser;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(307, 97);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Status";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // lblSrcUrl
+            // 
+            this.lblSrcUrl.AutoSize = true;
+            this.lblSrcUrl.Location = new System.Drawing.Point(6, 7);
+            this.lblSrcUrl.Name = "lblSrcUrl";
+            this.lblSrcUrl.Size = new System.Drawing.Size(20, 13);
+            this.lblSrcUrl.TabIndex = 19;
+            this.lblSrcUrl.Text = "Url";
+            // 
+            // chkSaveSource
+            // 
+            this.chkSaveSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkSaveSource.AutoSize = true;
+            this.chkSaveSource.Checked = true;
+            this.chkSaveSource.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSaveSource.Location = new System.Drawing.Point(243, 163);
+            this.chkSaveSource.Name = "chkSaveSource";
+            this.chkSaveSource.Size = new System.Drawing.Size(51, 17);
+            this.chkSaveSource.TabIndex = 22;
+            this.chkSaveSource.Text = "Save";
+            this.chkSaveSource.UseVisualStyleBackColor = true;
+            // 
+            // txtSourceUrl
+            // 
+            this.txtSourceUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSourceUrl.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourceUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtSourceUrl.Location = new System.Drawing.Point(35, 4);
+            this.txtSourceUrl.Name = "txtSourceUrl";
+            this.txtSourceUrl.Size = new System.Drawing.Size(315, 20);
+            this.txtSourceUrl.TabIndex = 1;
+            this.txtSourceUrl.Text = global::ReportSync.Properties.Settings.Default.SourceUrl;
+            // 
+            // pbSource
+            // 
+            this.pbSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbSource.Location = new System.Drawing.Point(10, 354);
+            this.pbSource.Name = "pbSource";
+            this.pbSource.Size = new System.Drawing.Size(350, 23);
+            this.pbSource.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pbSource.TabIndex = 22;
+            // 
+            // grpDest
+            // 
+            this.grpDest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpDest.Controls.Add(this.rptDestTree);
+            this.grpDest.Controls.Add(this.pnlDestSettings);
+            this.grpDest.Controls.Add(this.pbDest);
+            this.grpDest.Location = new System.Drawing.Point(3, 3);
+            this.grpDest.Name = "grpDest";
+            this.grpDest.Size = new System.Drawing.Size(365, 382);
+            this.grpDest.TabIndex = 27;
+            this.grpDest.TabStop = false;
+            this.grpDest.Text = "Destination SSRS web service";
+            // 
+            // rptDestTree
+            // 
+            this.rptDestTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rptDestTree.CheckBoxes = true;
+            this.rptDestTree.Location = new System.Drawing.Point(3, 205);
+            this.rptDestTree.Name = "rptDestTree";
+            this.rptDestTree.Size = new System.Drawing.Size(353, 145);
+            this.rptDestTree.TabIndex = 13;
+            this.rptDestTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rptDestTree_NodeMouseClick);
+            // 
+            // pnlDestSettings
+            // 
+            this.pnlDestSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlDestSettings.Controls.Add(this.tabDestSettings);
+            this.pnlDestSettings.Controls.Add(this.lblDestUrl);
+            this.pnlDestSettings.Controls.Add(this.chkSaveDest);
+            this.pnlDestSettings.Controls.Add(this.btnDestLoad);
+            this.pnlDestSettings.Controls.Add(this.txtDestUrl);
+            this.pnlDestSettings.Location = new System.Drawing.Point(3, 16);
+            this.pnlDestSettings.Name = "pnlDestSettings";
+            this.pnlDestSettings.Size = new System.Drawing.Size(353, 183);
+            this.pnlDestSettings.TabIndex = 24;
+            // 
+            // lblDestUrl
+            // 
+            this.lblDestUrl.AutoSize = true;
+            this.lblDestUrl.Location = new System.Drawing.Point(3, 7);
+            this.lblDestUrl.Name = "lblDestUrl";
+            this.lblDestUrl.Size = new System.Drawing.Size(20, 13);
+            this.lblDestUrl.TabIndex = 18;
+            this.lblDestUrl.Text = "Url";
+            // 
+            // chkSaveDest
+            // 
+            this.chkSaveDest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkSaveDest.AutoSize = true;
+            this.chkSaveDest.Checked = true;
+            this.chkSaveDest.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSaveDest.Location = new System.Drawing.Point(233, 163);
+            this.chkSaveDest.Name = "chkSaveDest";
+            this.chkSaveDest.Size = new System.Drawing.Size(51, 17);
+            this.chkSaveDest.TabIndex = 22;
+            this.chkSaveDest.Text = "Save";
+            this.chkSaveDest.UseVisualStyleBackColor = true;
+            // 
+            // btnDestLoad
+            // 
+            this.btnDestLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDestLoad.Location = new System.Drawing.Point(290, 160);
+            this.btnDestLoad.Name = "btnDestLoad";
+            this.btnDestLoad.Size = new System.Drawing.Size(57, 20);
+            this.btnDestLoad.TabIndex = 11;
+            this.btnDestLoad.Text = "Load";
+            this.btnDestLoad.UseVisualStyleBackColor = true;
+            this.btnDestLoad.Click += new System.EventHandler(this.btnDestLoad_Click);
+            // 
+            // txtDestUrl
+            // 
+            this.txtDestUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDestUrl.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "DestUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.txtDestUrl.Location = new System.Drawing.Point(27, 4);
+            this.txtDestUrl.Name = "txtDestUrl";
+            this.txtDestUrl.Size = new System.Drawing.Size(320, 20);
+            this.txtDestUrl.TabIndex = 8;
+            this.txtDestUrl.Text = global::ReportSync.Properties.Settings.Default.DestUrl;
+            // 
+            // pbDest
+            // 
+            this.pbDest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbDest.Location = new System.Drawing.Point(3, 354);
+            this.pbDest.Name = "pbDest";
+            this.pbDest.Size = new System.Drawing.Size(353, 23);
+            this.pbDest.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pbDest.TabIndex = 23;
+            // 
+            // tabDestSettings
+            // 
+            this.tabDestSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabDestSettings.Controls.Add(this.tabPage3);
+            this.tabDestSettings.Controls.Add(this.tabPage4);
+            this.tabDestSettings.Location = new System.Drawing.Point(3, 30);
+            this.tabDestSettings.Name = "tabDestSettings";
+            this.tabDestSettings.SelectedIndex = 0;
+            this.tabDestSettings.Size = new System.Drawing.Size(344, 123);
+            this.tabDestSettings.TabIndex = 24;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.cbDestIntegratedAuth);
+            this.tabPage3.Controls.Add(this.label3);
+            this.tabPage3.Controls.Add(this.tbDestPassword);
+            this.tabPage3.Controls.Add(this.label4);
+            this.tabPage3.Controls.Add(this.tbDestUser);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(336, 97);
+            this.tabPage3.TabIndex = 0;
+            this.tabPage3.Text = "Authentication";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // cbDestIntegratedAuth
+            // 
+            this.cbDestIntegratedAuth.AutoSize = true;
+            this.cbDestIntegratedAuth.Location = new System.Drawing.Point(9, 53);
+            this.cbDestIntegratedAuth.Name = "cbDestIntegratedAuth";
+            this.cbDestIntegratedAuth.Size = new System.Drawing.Size(164, 17);
+            this.cbDestIntegratedAuth.TabIndex = 26;
+            this.cbDestIntegratedAuth.Text = "Use Integated Authentication";
+            this.cbDestIntegratedAuth.UseVisualStyleBackColor = true;
+            this.cbDestIntegratedAuth.CheckedChanged += new System.EventHandler(this.cbDestIntegratedAuth_CheckedChanged_1);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 30);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 25;
+            this.label3.Text = "Password";
+            // 
+            // tbDestPassword
+            // 
+            this.tbDestPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDestPassword.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourcePassword", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.tbDestPassword.Location = new System.Drawing.Point(77, 27);
+            this.tbDestPassword.Name = "tbDestPassword";
+            this.tbDestPassword.PasswordChar = '*';
+            this.tbDestPassword.Size = new System.Drawing.Size(252, 20);
+            this.tbDestPassword.TabIndex = 23;
+            this.tbDestPassword.Text = global::ReportSync.Properties.Settings.Default.SourcePassword;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 7);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 13);
+            this.label4.TabIndex = 24;
+            this.label4.Text = "User";
+            // 
+            // tbDestUser
+            // 
+            this.tbDestUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDestUser.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "SourceUser", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.tbDestUser.Location = new System.Drawing.Point(77, 4);
+            this.tbDestUser.Name = "tbDestUser";
+            this.tbDestUser.Size = new System.Drawing.Size(252, 20);
+            this.tbDestUser.TabIndex = 22;
+            this.tbDestUser.Text = global::ReportSync.Properties.Settings.Default.SourceUser;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(307, 97);
+            this.tabPage4.TabIndex = 1;
+            this.tabPage4.Text = "Status";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // currentStatus
+            // 
+            this.currentStatus.Name = "currentStatus";
+            this.currentStatus.Size = new System.Drawing.Size(0, 17);
+            // 
             // ReportSync
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 518);
+            this.ClientSize = new System.Drawing.Size(758, 473);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.bottomPanel);
+            this.Controls.Add(this.bottomStrip);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ReportSync";
             this.Text = "ReportSync";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ReportSync_FormClosed);
-            this.grpSource.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.grpDest.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.bottomStrip.ResumeLayout(false);
+            this.bottomStrip.PerformLayout();
+            this.bottomPanel.ResumeLayout(false);
+            this.bottomPanel.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.grpSource.ResumeLayout(false);
+            this.panelSource.ResumeLayout(false);
+            this.panelSource.PerformLayout();
+            this.tabSourceAuth.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.grpDest.ResumeLayout(false);
+            this.pnlDestSettings.ResumeLayout(false);
+            this.pnlDestSettings.PerformLayout();
+            this.tabDestSettings.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -588,42 +750,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtSourceUrl;
-        private System.Windows.Forms.Button btnSourceLoad;
-        private System.Windows.Forms.TextBox txtSourceUser;
-        private System.Windows.Forms.TextBox txtSourcePassword;
-        private System.Windows.Forms.TreeView rptSourceTree;
-        private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.FolderBrowserDialog dlgDest;
-        private System.Windows.Forms.TextBox txtLocalPath;
-        private System.Windows.Forms.Button btnDest;
-        private System.Windows.Forms.TextBox txtDestUrl;
-        private System.Windows.Forms.TextBox txtDestUser;
-        private System.Windows.Forms.TextBox txtDestPassword;
-        private System.Windows.Forms.Button btnDestLoad;
-        private System.Windows.Forms.TreeView rptDestTree;
-        private System.Windows.Forms.Button btnSync;
-        private System.Windows.Forms.Label lblDestPass;
-        private System.Windows.Forms.Label lblDestUser;
-        private System.Windows.Forms.Label lblDestUrl;
-        private System.Windows.Forms.GroupBox grpSource;
-        private System.Windows.Forms.Label lblSrcUrl;
-        private System.Windows.Forms.GroupBox grpDest;
-        private System.Windows.Forms.Label lblDest;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnUpload;
-        private System.Windows.Forms.CheckBox chkSaveSource;
-        private System.Windows.Forms.CheckBox chkSaveDest;
-        private System.Windows.Forms.ProgressBar pbSource;
-        private System.Windows.Forms.ProgressBar pbDest;
         private System.ComponentModel.BackgroundWorker bwDownload;
         private System.ComponentModel.BackgroundWorker bwUpload;
         private System.ComponentModel.BackgroundWorker bwSync;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
@@ -639,6 +769,48 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.SaveFileDialog dlgSaveFile;
         private System.Windows.Forms.OpenFileDialog dlgOpenFile;
+        private System.Windows.Forms.StatusStrip bottomStrip;
+        private System.Windows.Forms.Panel bottomPanel;
+        private System.Windows.Forms.Button btnUpload;
+        private System.Windows.Forms.TextBox txtLocalPath;
+        private System.Windows.Forms.Label lblDest;
+        private System.Windows.Forms.Button btnDownload;
+        private System.Windows.Forms.Button btnSync;
+        private System.Windows.Forms.Button btnDest;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.GroupBox grpSource;
+        private System.Windows.Forms.TreeView rptSourceTree;
+        private System.Windows.Forms.Panel panelSource;
+        private System.Windows.Forms.Button btnSourceLoad;
+        private System.Windows.Forms.TabControl tabSourceAuth;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.CheckBox cbSourceIntegratedAuth;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbSourcePassword;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbSourceUser;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label lblSrcUrl;
+        private System.Windows.Forms.CheckBox chkSaveSource;
+        private System.Windows.Forms.TextBox txtSourceUrl;
+        private System.Windows.Forms.ProgressBar pbSource;
+        private System.Windows.Forms.GroupBox grpDest;
+        private System.Windows.Forms.TreeView rptDestTree;
+        private System.Windows.Forms.Panel pnlDestSettings;
+        private System.Windows.Forms.Label lblDestUrl;
+        private System.Windows.Forms.CheckBox chkSaveDest;
+        private System.Windows.Forms.Button btnDestLoad;
+        private System.Windows.Forms.TextBox txtDestUrl;
+        private System.Windows.Forms.ProgressBar pbDest;
+        private System.Windows.Forms.TabControl tabDestSettings;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.CheckBox cbDestIntegratedAuth;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbDestPassword;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbDestUser;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.ToolStripStatusLabel currentStatus;
     }
 }
 

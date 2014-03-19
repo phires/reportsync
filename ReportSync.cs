@@ -21,11 +21,8 @@ namespace ReportSync
         const string DestSelectionStart = "ReportSyncDest:";
         const string MappingStart = "ReportSyncMap:";
 
-        private ReportingService2005 _sourceRs;
-        private ReportingService2005 _destRs;
-
-        private Dictionary<string, string> _sourceDs;
-        private Dictionary<string, string> _destDs;
+        private ReportingServicesMgmt _destServicesMgmt;
+        private ReportingServicesMgmt _sourceServicesMgmt;
 
         private string _pathOnDisk;
 
@@ -71,7 +68,7 @@ namespace ReportSync
         void bwSync_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             UnCheckTreeNodes(rptSourceTree.Nodes);
-            LoadDestTree();
+            //LoadDestTree();
             MessageBox.Show(Resources.Sync_completed_successfully, Resources.Sync_complete);
         }
 
@@ -87,7 +84,7 @@ namespace ReportSync
 
         void bwUpload_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            LoadDestTree();
+            //LoadDestTree();
             MessageBox.Show(Resources.Upload_completed_successfully, Resources.Upload_complete);
         }
 
@@ -143,117 +140,54 @@ namespace ReportSync
                 MessageBox.Show(Resources.Download_failed + ex.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void btnLoad_Click(object sender, EventArgs e)
+       
+        private void btnSourceLoad_Click(object sender, EventArgs e)
         {
-            try
-            {
-                _sourceRs = new ReportingService2005();
-                var reportServerUri = "http://localhost:8080/ReportServer";
-                if (!String.IsNullOrEmpty(txtSourceUrl.Text))
-                {
-                    reportServerUri = txtSourceUrl.Text;
-                }
-
-                _sourceRs.Url = reportServerUri + "/ReportService2005.asmx";
-
-                if (!String.IsNullOrEmpty(txtSourceUser.Text))
-                {
-                    var userName = txtSourceUser.Text;
-                    var nameParts = userName.Split('\\', '/');
-                    if(nameParts.Length > 2)
-                    {
-                        MessageBox.Show(Resources.Incorrect_source_user_name, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    if (nameParts.Length == 2)
-                    {
-                        userName = nameParts[1];
-                        _sourceRs.Credentials = new System.Net.NetworkCredential(userName, txtSourcePassword.Text, nameParts[0]);
-                    }
-                    else
-                    {
-                        _sourceRs.Credentials = new System.Net.NetworkCredential(userName, txtSourcePassword.Text);
-                    }
-                }
-                else
-                {
-                    _sourceRs.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                }
-            
-                rptSourceTree.Nodes.Clear();
-                _sourceDs = new Dictionary<string, string>();
-                LoadTreeNode(RootFolder, rptSourceTree.Nodes, _sourceRs, _sourceDs);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(Resources.Loading_failed + ex.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            currentStatus.Text = Resources.Getting_reports__please_wait;
+            grpSource.Enabled = false;
+            Application.DoEvents();
+            _sourceServicesMgmt = cbSourceIntegratedAuth.Checked ? new ReportingServicesMgmt(txtSourceUrl.Text, null, null, true) : new ReportingServicesMgmt(txtSourceUrl.Text, tbSourceUser.Text, tbSourcePassword.Text, true);
+            rptSourceTree.Nodes.Clear();
+            _sourceServicesMgmt.Initialize("/");
+            rptSourceTree.BeginUpdate();
+            LoadTreeNode(RootFolder, rptSourceTree.Nodes, _sourceServicesMgmt.ReportingService);
+            rptSourceTree.EndUpdate();
+            currentStatus.Text = String.Empty;
+            grpSource.Enabled = true;
         }
 
         private void btnDestLoad_Click(object sender, EventArgs e)
         {
-            _destRs = new ReportingService2005();
-            var reportServerUri = "http://localhost:8080/ReportServer";
-            if (!String.IsNullOrEmpty(txtDestUrl.Text))
-            {
-                reportServerUri = txtDestUrl.Text;
-            }
-
-            _destRs.Url = reportServerUri + "/ReportService2005.asmx";
-
-            if (!String.IsNullOrEmpty(txtDestUser.Text))
-            {
-                var userName = txtDestUser.Text;
-                var nameParts = userName.Split('\\', '/');
-                if (nameParts.Length > 2)
-                {
-                    MessageBox.Show(Resources.Incorrect_destination_user_name,Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (nameParts.Length == 2)
-                {
-                    userName = nameParts[1];
-                    _destRs.Credentials = new System.Net.NetworkCredential(userName, txtDestPassword.Text, nameParts[0]);
-                }
-                else
-                {
-                    _destRs.Credentials = new System.Net.NetworkCredential(userName, txtDestPassword.Text);
-                }             
-            }
-            else
-            {
-                _destRs.Credentials = System.Net.CredentialCache.DefaultCredentials;
-            }
-            try
-            {
-                LoadDestTree();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(Resources.Loading_failed + ex.Message, Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            currentStatus.Text = Resources.Getting_reports__please_wait;
+            grpDest.Enabled = false;
+            Application.DoEvents();
+            _destServicesMgmt = cbDestIntegratedAuth.Checked ? new ReportingServicesMgmt(txtDestUrl.Text, null, null, true) : new ReportingServicesMgmt(txtDestUrl.Text, tbDestUser.Text, tbDestPassword.Text, true);
+            rptDestTree.Nodes.Clear();
+            _destServicesMgmt.Initialize("/");
+            rptDestTree.BeginUpdate();
+            LoadTreeNode(RootFolder, rptDestTree.Nodes, _destServicesMgmt.ReportingService);
+            rptDestTree.EndUpdate();
+            currentStatus.Text = String.Empty;
+            grpDest.Enabled = true;
         }
 
-        private static void LoadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs, Dictionary<string, string> dataSources)
+
+        private static void LoadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs)
         {
             var items = rs.ListChildren(path, false);
             foreach (var item in items)
             {
-                var t = new TreeNode {Text = item.Name, Name = item.Name};
-                if (item.Type == ItemTypeEnum.DataSource)
-                {
-                    if(!dataSources.ContainsKey(item.Name))
-                        dataSources.Add(item.Name, item.Path);
-                }
+                var t = new TreeNode { Text = item.Name, Name = item.Name };
+
                 if (item.Type != ItemTypeEnum.Model && item.Type != ItemTypeEnum.DataSource)
-                {    
+                {
                     nodes.Add(t);
                 }
                 if (item.Type == ItemTypeEnum.Folder)
-                    LoadTreeNode(item.Path, t.Nodes, rs, dataSources);
+                    LoadTreeNode(item.Path, t.Nodes, rs);
             }
         }
+
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
@@ -313,18 +247,18 @@ namespace ReportSync
                 else
                 {
                     var itemPath = RootFolder + node.FullPath.Replace("\\", "/");
-                    var itemType = _sourceRs.GetItemType(itemPath);
+                    var itemType = _sourceServicesMgmt.ReportingService.GetItemType(itemPath);
                     if (itemType == ItemTypeEnum.Resource)
                     {
                         //Download the resource
                         string resourceType;
-                        var contents = _sourceRs.GetResourceContents(itemPath, out resourceType);
+                        var contents = _sourceServicesMgmt.ReportingService.GetResourceContents(itemPath, out resourceType);
                         File.WriteAllBytes(destPath, contents);
                         continue;
                     }
                     if (itemType == ItemTypeEnum.Report || itemType == ItemTypeEnum.LinkedReport)
                     {
-                        var reportDef = _sourceRs.GetReportDefinition(itemPath);
+                        var reportDef = _sourceServicesMgmt.ReportingService.GetReportDefinition(itemPath);
                         var rdl = new XmlDocument();
                         rdl.Load(new MemoryStream(reportDef));
                         rdl.Save(destPath + ".rdl");
@@ -333,14 +267,6 @@ namespace ReportSync
                 _processedNodeCount++;
                 bwDownload.ReportProgress(_processedNodeCount * 100 / _selectedNodeCount);
             }
-        }
-
-        private void LoadDestTree()
-        {
-            _uploadPath = RootFolder;
-            rptDestTree.Nodes.Clear();
-            _destDs = new Dictionary<string, string>();
-            LoadTreeNode(RootFolder, rptDestTree.Nodes, _destRs, _destDs);
         }
 
         private void btnSync_Click(object sender, EventArgs e)
@@ -382,17 +308,17 @@ namespace ReportSync
                         _existingPaths.Add(destPath);
                     }
                     var itemPath = RootFolder + node.FullPath.Replace("\\", PathSeperator);
-                    var itemType = _sourceRs.GetItemType(itemPath);
+                    var itemType = _sourceServicesMgmt.ReportingService.GetItemType(itemPath);
                     if (itemType == ItemTypeEnum.Resource)
                     {
                         //Download the resource
                         string resourceType;
-                        var contents = _sourceRs.GetResourceContents(itemPath, out resourceType);
+                        var contents = _sourceServicesMgmt.ReportingService.GetResourceContents(itemPath, out resourceType);
                         UploadResource(destPath, node.Text, resourceType, contents);
                         _processedNodeCount++;
                         continue;
                     }
-                    var reportDef = _sourceRs.GetReportDefinition(itemPath);
+                    var reportDef = _sourceServicesMgmt.ReportingService.GetReportDefinition(itemPath);
                     UploadReport(destPath, node.Text, reportDef);
 
                     //Sync subscriptions
@@ -403,7 +329,7 @@ namespace ReportSync
                     else
                         destReportPath += "/" + node.Text;
 
-                    var subscriptions = _sourceRs.ListSubscriptions(itemPath, txtSourceUser.Text);
+                    var subscriptions = _sourceServicesMgmt.ReportingService.ListSubscriptions(itemPath, tbSourceUser.Text);
                     foreach (var subscription in subscriptions)
                     {
                         ExtensionSettings extSettings;
@@ -413,16 +339,16 @@ namespace ReportSync
                         string eventType;
                         string matchData;
                         ParameterValue[] values;
-                        _sourceRs.GetSubscriptionProperties(subscription.SubscriptionID, out extSettings, out desc, out active, out status, out eventType, out matchData, out values);
+                        _sourceServicesMgmt.ReportingService.GetSubscriptionProperties(subscription.SubscriptionID, out extSettings, out desc, out active, out status, out eventType, out matchData, out values);
                         if (extSettings.Extension == "Report Server FileShare")
                         {
-                            var para = new ParameterValue {Name = "PASSWORD", Value = txtDestPassword.Text};
+                            var para = new ParameterValue {Name = "PASSWORD", Value = tbDestPassword.Text};
                             var exParams = new ParameterValueOrFieldReference[extSettings.ParameterValues.Length + 1];
                             Array.Copy(extSettings.ParameterValues, exParams, extSettings.ParameterValues.Length);
                             exParams[extSettings.ParameterValues.Length] = para;
                             extSettings.ParameterValues = exParams;
                         }
-                        _destRs.CreateSubscription(destReportPath, extSettings, desc, eventType, matchData, values);
+                        _destServicesMgmt.ReportingService.CreateSubscription(destReportPath, extSettings, desc, eventType, matchData, values);
                     }
 
                     _processedNodeCount++;
@@ -433,7 +359,7 @@ namespace ReportSync
 
         private void UploadResource(string destinationPath, string resourceName, string resourceType, byte[] contents)
         {
-            _destRs.CreateResource(resourceName, destinationPath, true, contents, resourceType, null);
+            _destServicesMgmt.ReportingService.CreateResource(resourceName, destinationPath, true, contents, resourceType, null);
         }
 
         private void UploadReport(string destinationPath, string reportName, byte[] reportDef)
@@ -441,7 +367,7 @@ namespace ReportSync
             try
             {
                 //Create report
-                _destRs.CreateReport(reportName, destinationPath, true, reportDef, null);
+                _destServicesMgmt.ReportingService.CreateReport(reportName, destinationPath, true, reportDef, null);
 
                 //Link datasources
                 var reportPath = destinationPath;
@@ -449,8 +375,8 @@ namespace ReportSync
                     reportPath += reportName;
                 else
                     reportPath += "/" + reportName;
-                var reportDss = _destRs.GetItemDataSources(reportPath);
-                _destRs.SetItemDataSources(reportPath, (from reportDs in reportDss where _destDs.ContainsKey(reportDs.Name) let reference = new DataSourceReference {Reference = _destDs[reportDs.Name]} select new DataSource {Item = reference, Name = reportDs.Name}).ToArray());
+                var reportDss = _destServicesMgmt.ReportingService.GetItemDataSources(reportPath);
+                _destServicesMgmt.ReportingService.SetItemDataSources(reportPath, (from reportDs in reportDss where _destServicesMgmt.DataSources.ContainsKey(reportDs.Name) let reference = new DataSourceReference { Reference = _destServicesMgmt.DataSources[reportDs.Name] } select new DataSource { Item = reference, Name = reportDs.Name }).ToArray());
             }
             catch (Exception e)
             {
@@ -476,7 +402,7 @@ namespace ReportSync
         { 
             try
             {
-                _destRs.ListChildren(path, false);
+                _destServicesMgmt.ReportingService.ListChildren(path, false);
             }
             catch (Exception)
             { 
@@ -487,7 +413,7 @@ namespace ReportSync
                 if (String.IsNullOrEmpty(parent))
                     parent = RootFolder;
                 EnsureDestDir(parent);
-                _destRs.CreateFolder(folder,parent, null);
+                _destServicesMgmt.ReportingService.CreateFolder(folder, parent, null);
             }
         }
 
@@ -524,7 +450,13 @@ namespace ReportSync
 
         private void mapDataSourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var frmMapDs = new MapDatasources {SourceDs = _sourceDs, DestDs = _destDs};
+            if (_sourceServicesMgmt == null || _destServicesMgmt == null)
+            {
+                MessageBox.Show(Resources.Please_load_reports_from_both_source_and_destination_server, Resources.Error,
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            var frmMapDs = new MapDatasources { SourceDs = _sourceServicesMgmt.DataSources, DestDs = _destServicesMgmt.DataSources };
             frmMapDs.ShowDialog();
         }
 
@@ -564,8 +496,8 @@ namespace ReportSync
                         break;
                     case 3:
                         var entryParts = line.Split('=');
-                        if (entryParts.Length == 2 && _destDs.ContainsKey(entryParts[0]))
-                            _destDs[entryParts[0]] = entryParts[1];
+                        if (entryParts.Length == 2 && _destServicesMgmt.DataSources.ContainsKey(entryParts[0]))
+                            _destServicesMgmt.DataSources[entryParts[0]] = entryParts[1];
                         break;
                 }
             }
@@ -621,7 +553,7 @@ namespace ReportSync
                 data += SaveCheckedNodes(rptDestTree.Nodes);
                 data += MappingStart + Environment.NewLine;
                 //save mapping
-                data = _destDs.Aggregate(data, (current, entry) => current + (entry.Key + "=" + entry.Value + Environment.NewLine));
+                data = _destServicesMgmt.DataSources.Aggregate(data, (current, entry) => current + (entry.Key + "=" + entry.Value + Environment.NewLine));
                 File.WriteAllText(_pathOnDisk, data);
             }
             else
@@ -633,6 +565,17 @@ namespace ReportSync
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveSelectedNodesToDisk();
+        }
+
+       
+        private void cbDestIntegratedAuth_CheckedChanged_1(object sender, EventArgs e)
+        {
+            tbDestUser.Enabled = tbDestPassword.Enabled = !cbDestIntegratedAuth.Checked;
+        }
+
+        private void cbSourceIntegratedAuth_CheckedChanged_1(object sender, EventArgs e)
+        {
+            tbSourceUser.Enabled = tbSourcePassword.Enabled = !cbSourceIntegratedAuth.Checked;
         }
     }
 }
