@@ -30,8 +30,14 @@ namespace ReportSync
         private List<string> _existingPaths;
 
         private int _selectedNodeCount;
-
         private int _processedNodeCount;
+
+        private int _countFolderSource;
+        private int _countReportsSource;
+        
+        private int _countFolderDest;
+        private int _countReportsDest;
+
 
         public ReportSync()
         {
@@ -143,17 +149,22 @@ namespace ReportSync
        
         private void btnSourceLoad_Click(object sender, EventArgs e)
         {
+            var stopLoad = new Stopwatch();
+            stopLoad.Start();
             currentStatus.Text = Resources.Getting_reports__please_wait;
             grpSource.Enabled = false;
+            tabSourceSettings.SelectTab("tabSourceStatus");
+            _countFolderSource = _countReportsSource = 0;
             Application.DoEvents();
             _sourceServicesMgmt = cbSourceIntegratedAuth.Checked ? new ReportingServicesMgmt(txtSourceUrl.Text, null, null, true) : new ReportingServicesMgmt(txtSourceUrl.Text, tbSourceUser.Text, tbSourcePassword.Text, true);
             rptSourceTree.Nodes.Clear();
-            _sourceServicesMgmt.Initialize("/");
             rptSourceTree.BeginUpdate();
-            LoadTreeNode(RootFolder, rptSourceTree.Nodes, _sourceServicesMgmt.ReportingService);
+            LoadTreeNode(RootFolder, rptSourceTree.Nodes, _sourceServicesMgmt.ReportingService, true);
             rptSourceTree.EndUpdate();
             currentStatus.Text = String.Empty;
             grpSource.Enabled = true;
+            stopLoad.Stop();
+            lbSourceStatus.Text += Environment.NewLine + String.Format("Process took {0}", stopLoad.Elapsed);
         }
 
         private void btnDestLoad_Click(object sender, EventArgs e)
@@ -163,7 +174,6 @@ namespace ReportSync
             Application.DoEvents();
             _destServicesMgmt = cbDestIntegratedAuth.Checked ? new ReportingServicesMgmt(txtDestUrl.Text, null, null, true) : new ReportingServicesMgmt(txtDestUrl.Text, tbDestUser.Text, tbDestPassword.Text, true);
             rptDestTree.Nodes.Clear();
-            _destServicesMgmt.Initialize("/");
             rptDestTree.BeginUpdate();
             LoadTreeNode(RootFolder, rptDestTree.Nodes, _destServicesMgmt.ReportingService);
             rptDestTree.EndUpdate();
@@ -172,19 +182,47 @@ namespace ReportSync
         }
 
 
-        private static void LoadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs)
+        private void LoadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs, bool source = false)
         {
             var items = rs.ListChildren(path, false);
             foreach (var item in items)
             {
+                if(source)
+                    lbSourceStatus.Text = String.Format("Source contains:{0} {1} reports{0} {2} folders{0} {3} datasources", Environment.NewLine,
+                        _countReportsSource, _countFolderSource, _sourceServicesMgmt.DataSources.Count);
+                else
+                    lbDestStatus.Text = String.Format("Destination contains:{0} {1} reports{0} {2} folders{0} {3} datasources", Environment.NewLine,
+                        _countReportsDest, _countFolderDest, _destServicesMgmt.DataSources.Count);
+
+                Application.DoEvents();
                 var t = new TreeNode { Text = item.Name, Name = item.Name };
+
+                if (item.Type == ItemTypeEnum.DataSource)
+                {
+                    if (source)
+                    {
+                        if (!_sourceServicesMgmt.DataSources.ContainsKey(item.Name))
+                            _sourceServicesMgmt.DataSources.Add(item.Name, item.Path);
+                    }
+                    else
+                    {
+                        if (!_destServicesMgmt.DataSources.ContainsKey(item.Name))
+                            _destServicesMgmt.DataSources.Add(item.Name, item.Path);
+                    }
+                }
 
                 if (item.Type != ItemTypeEnum.Model && item.Type != ItemTypeEnum.DataSource)
                 {
                     nodes.Add(t);
+                    if (source) _countReportsSource++;
+                    else _countReportsDest++;
                 }
                 if (item.Type == ItemTypeEnum.Folder)
-                    LoadTreeNode(item.Path, t.Nodes, rs);
+                {
+                    LoadTreeNode(item.Path, t.Nodes, rs, source);
+                    if (source) _countFolderSource++;
+                    else _countFolderDest++;
+                }
             }
         }
 
