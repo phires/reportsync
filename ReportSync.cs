@@ -184,7 +184,17 @@ namespace ReportSync
 
         private void LoadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs, bool source = false)
         {
-            var items = rs.ListChildren(path, false);
+            CatalogItem[] items;
+            try
+            {
+                items = rs.ListChildren(path, false);
+            }
+            catch (Exception x)
+            {
+                return;
+
+            }
+            
             foreach (var item in items)
             {
                 if(source)
