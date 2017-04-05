@@ -51,6 +51,8 @@
             this.bottomStrip = new System.Windows.Forms.StatusStrip();
             this.currentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.bottomPanel = new System.Windows.Forms.Panel();
+            this.lblEncoding = new System.Windows.Forms.Label();
+            this.cbEncoding = new System.Windows.Forms.ComboBox();
             this.btnUpload = new System.Windows.Forms.Button();
             this.txtLocalPath = new System.Windows.Forms.TextBox();
             this.lblDest = new System.Windows.Forms.Label();
@@ -256,6 +258,8 @@
             // 
             this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomPanel.Controls.Add(this.lblEncoding);
+            this.bottomPanel.Controls.Add(this.cbEncoding);
             this.bottomPanel.Controls.Add(this.btnUpload);
             this.bottomPanel.Controls.Add(this.txtLocalPath);
             this.bottomPanel.Controls.Add(this.lblDest);
@@ -835,6 +839,8 @@
         private System.Windows.Forms.ToolStripStatusLabel currentStatus;
         private System.Windows.Forms.Label lbSourceStatus;
         private System.Windows.Forms.Label lbDestStatus;
+        private System.Windows.Forms.ComboBox cbEncoding;
+        private System.Windows.Forms.Label lblEncoding;
     }
 }
 

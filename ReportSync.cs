@@ -24,6 +24,8 @@ namespace ReportSync
         private ReportingServicesMgmt _destServicesMgmt;
         private ReportingServicesMgmt _sourceServicesMgmt;
 
+        private string _selectedEncoding = "Default";
+
         private string _pathOnDisk;
 
         private string _uploadPath = RootFolder;
@@ -115,6 +117,10 @@ namespace ReportSync
                 var report = new XmlDocument();
                 report.Load(file);
                 var reportDef = Encoding.Default.GetBytes(report.OuterXml);
+                if (_selectedEncoding.Equals("UTF8"))
+                {
+                    reportDef = Encoding.UTF8.GetBytes(report.OuterXml);
+                }
                 if (!_existingPaths.Contains(reportPath))
                 {
                     EnsureDestDir(reportPath);
@@ -625,5 +631,21 @@ namespace ReportSync
         {
             tbSourceUser.Enabled = tbSourcePassword.Enabled = !cbSourceIntegratedAuth.Checked;
         }
+
+        private void cbEncoding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox comboBox = (ComboBox) sender;
+            string selectedEncoding = (string)comboBox.SelectedItem;
+            if (!String.IsNullOrEmpty(selectedEncoding))
+            {
+                _selectedEncoding = selectedEncoding;
+            }
+            else
+            {
+                _selectedEncoding = "Default";
+            }
+            
+        }
+
     }
 }
