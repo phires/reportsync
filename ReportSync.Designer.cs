@@ -51,6 +51,8 @@
             this.bottomStrip = new System.Windows.Forms.StatusStrip();
             this.currentStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.bottomPanel = new System.Windows.Forms.Panel();
+            this.lblEncoding = new System.Windows.Forms.Label();
+            this.cbEncoding = new System.Windows.Forms.ComboBox();
             this.btnUpload = new System.Windows.Forms.Button();
             this.txtLocalPath = new System.Windows.Forms.TextBox();
             this.lblDest = new System.Windows.Forms.Label();
@@ -256,6 +258,8 @@
             // 
             this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomPanel.Controls.Add(this.lblEncoding);
+            this.bottomPanel.Controls.Add(this.cbEncoding);
             this.bottomPanel.Controls.Add(this.btnUpload);
             this.bottomPanel.Controls.Add(this.txtLocalPath);
             this.bottomPanel.Controls.Add(this.lblDest);
@@ -266,6 +270,28 @@
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(758, 36);
             this.bottomPanel.TabIndex = 22;
+            // 
+            // lblEncoding
+            // 
+            this.lblEncoding.AutoSize = true;
+            this.lblEncoding.Location = new System.Drawing.Point(607, 9);
+            this.lblEncoding.Name = "lblEncoding";
+            this.lblEncoding.Size = new System.Drawing.Size(55, 13);
+            this.lblEncoding.TabIndex = 23;
+            this.lblEncoding.Text = "Encoding:";
+            // 
+            // cbEncoding
+            // 
+            this.cbEncoding.FormattingEnabled = true;
+            this.cbEncoding.Items.AddRange(new object[] {
+            "Default",
+            "UTF8"});
+            this.cbEncoding.Location = new System.Drawing.Point(668, 6);
+            this.cbEncoding.Name = "cbEncoding";
+            this.cbEncoding.Size = new System.Drawing.Size(75, 21);
+            this.cbEncoding.TabIndex = 22;
+            this.cbEncoding.Text = "Default";
+            this.cbEncoding.SelectedIndexChanged += new System.EventHandler(this.cbEncoding_SelectedIndexChanged);
             // 
             // btnUpload
             // 
@@ -835,6 +861,8 @@
         private System.Windows.Forms.ToolStripStatusLabel currentStatus;
         private System.Windows.Forms.Label lbSourceStatus;
         private System.Windows.Forms.Label lbDestStatus;
+        private System.Windows.Forms.ComboBox cbEncoding;
+        private System.Windows.Forms.Label lblEncoding;
     }
 }
 
