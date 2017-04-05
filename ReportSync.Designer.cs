@@ -271,6 +271,28 @@
             this.bottomPanel.Size = new System.Drawing.Size(758, 36);
             this.bottomPanel.TabIndex = 22;
             // 
+            // lblEncoding
+            // 
+            this.lblEncoding.AutoSize = true;
+            this.lblEncoding.Location = new System.Drawing.Point(607, 9);
+            this.lblEncoding.Name = "lblEncoding";
+            this.lblEncoding.Size = new System.Drawing.Size(55, 13);
+            this.lblEncoding.TabIndex = 23;
+            this.lblEncoding.Text = "Encoding:";
+            // 
+            // cbEncoding
+            // 
+            this.cbEncoding.FormattingEnabled = true;
+            this.cbEncoding.Items.AddRange(new object[] {
+            "Default",
+            "UTF8"});
+            this.cbEncoding.Location = new System.Drawing.Point(668, 6);
+            this.cbEncoding.Name = "cbEncoding";
+            this.cbEncoding.Size = new System.Drawing.Size(75, 21);
+            this.cbEncoding.TabIndex = 22;
+            this.cbEncoding.Text = "Default";
+            this.cbEncoding.SelectedIndexChanged += new System.EventHandler(this.cbEncoding_SelectedIndexChanged);
+            // 
             // btnUpload
             // 
             this.btnUpload.Location = new System.Drawing.Point(378, 6);
