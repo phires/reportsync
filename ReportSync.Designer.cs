@@ -191,7 +191,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mapDataSourcesToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // mapDataSourcesToolStripMenuItem
@@ -369,6 +369,8 @@
             this.rptSourceTree.Name = "rptSourceTree";
             this.rptSourceTree.Size = new System.Drawing.Size(348, 145);
             this.rptSourceTree.TabIndex = 5;
+            this.rptSourceTree.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.rptSourceTree_AfterCheck);
+            this.rptSourceTree.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.rptSourceTree_AfterExpand);
             // 
             // panelSource
             // 
@@ -560,6 +562,8 @@
             this.rptDestTree.Name = "rptDestTree";
             this.rptDestTree.Size = new System.Drawing.Size(353, 145);
             this.rptDestTree.TabIndex = 13;
+            this.rptDestTree.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.rptDestTree_AfterCheck);
+            this.rptDestTree.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.rptDestTree_AfterExpand);
             this.rptDestTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rptDestTree_NodeMouseClick);
             // 
             // pnlDestSettings

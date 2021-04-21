@@ -190,7 +190,6 @@ namespace ReportSync
             grpDest.Enabled = true;
         }
 
-
         private void LoadTreeNode(string path, TreeNodeCollection nodes, ReportingService2005 rs, bool source = false)
         {
             CatalogItem[] items;
@@ -198,11 +197,10 @@ namespace ReportSync
             {
                 items = rs.ListChildren(path, false);
             }
-            catch (Exception x)
+            catch
             {
                 MessageBox.Show("Error loading url");
                 return;
-
             }
             currentStatus.Text = "Loading resources from " + path;
             foreach (var item in items)
@@ -237,15 +235,18 @@ namespace ReportSync
                     if (source) _countReportsSource++;
                     else _countReportsDest++;
                 }
+
                 if (item.Type == ItemTypeEnum.Folder)
                 {
-                    LoadTreeNode(item.Path, t.Nodes, rs, source);
+                    // Adds a "dummy" child node to flag that this node needs to be filled. The nodes are filled whenever
+                    // they are expanded or checked.
+                    t.Nodes.Add(new LoadingTreeNode(item.Path));
+
                     if (source) _countFolderSource++;
                     else _countFolderDest++;
                 }
             }
         }
-
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
@@ -652,6 +653,81 @@ namespace ReportSync
         private void cbSourceIntegratedAuth_CheckedChanged_1(object sender, EventArgs e)
         {
             tbSourceUser.Enabled = tbSourcePassword.Enabled = !cbSourceIntegratedAuth.Checked;
+        }
+
+        private void rptSourceTree_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            DoWithDisabledUI(() => EnsureChildNodesAreLoaded(e.Node, _sourceServicesMgmt.ReportingService, true));
+        }
+
+        private void rptSourceTree_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Checked)
+            {
+                DoWithDisabledUI(() => EnsureDescendantNodesAreLoaded(e.Node, _sourceServicesMgmt.ReportingService, true));
+            }
+        }
+
+        private void rptDestTree_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            DoWithDisabledUI(() => EnsureChildNodesAreLoaded(e.Node, _destServicesMgmt.ReportingService, false));
+        }
+
+        private void rptDestTree_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Checked)
+            {
+                DoWithDisabledUI(() => EnsureDescendantNodesAreLoaded(e.Node, _destServicesMgmt.ReportingService, false));
+            }
+        }
+
+        private void EnsureDescendantNodesAreLoaded(TreeNode parentNode, ReportingService2005 reportingService, bool source)
+        {
+            if (!EnsureChildNodesAreLoaded(parentNode, reportingService, source))
+            {
+                return;
+            }
+
+            foreach (TreeNode childNode in parentNode.Nodes)
+            {
+                EnsureDescendantNodesAreLoaded(childNode, reportingService, source);
+            }
+        }
+
+        private bool EnsureChildNodesAreLoaded(TreeNode parentNode, ReportingService2005 reportingService, bool source)
+        {
+            LoadingTreeNode loadingTreeNode;
+            if (LoadingTreeNode.TryGetLoadingNode(parentNode, out loadingTreeNode))
+            {
+                parentNode.Nodes.Clear();
+                LoadTreeNode(loadingTreeNode.SsrsPath, parentNode.Nodes, reportingService, source);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        // Since Application.DoEvents is being used, there are many actions that we don't want the user to interrupt.
+        // This makes sure the user doesn't click on something while we are processing.
+        private void DoWithDisabledUI(Action action)
+        {
+            if (this.Enabled)
+            {
+                this.Enabled = false;
+                try
+                {
+                    action();
+                }
+                finally
+                {
+                    this.Enabled = true;
+                }
+            }
+            else
+            {
+                action();
+            }
         }
     }
 }
