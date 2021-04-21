@@ -70,6 +70,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbSourceUser = new System.Windows.Forms.TextBox();
             this.tabSourceStatus = new System.Windows.Forms.TabPage();
+            this.lbSourceStatus = new System.Windows.Forms.Label();
             this.lblSrcUrl = new System.Windows.Forms.Label();
             this.chkSaveSource = new System.Windows.Forms.CheckBox();
             this.txtSourceUrl = new System.Windows.Forms.TextBox();
@@ -85,13 +86,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbDestUser = new System.Windows.Forms.TextBox();
             this.tabDestStatus = new System.Windows.Forms.TabPage();
+            this.lbDestStatus = new System.Windows.Forms.Label();
             this.lblDestUrl = new System.Windows.Forms.Label();
             this.chkSaveDest = new System.Windows.Forms.CheckBox();
             this.btnDestLoad = new System.Windows.Forms.Button();
             this.txtDestUrl = new System.Windows.Forms.TextBox();
             this.pbDest = new System.Windows.Forms.ProgressBar();
-            this.lbSourceStatus = new System.Windows.Forms.Label();
-            this.lbDestStatus = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.bottomStrip.SuspendLayout();
             this.bottomPanel.SuspendLayout();
@@ -151,38 +151,38 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(111, 6);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -214,14 +214,14 @@
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.contentsToolStripMenuItem.Text = "Contents (Online)";
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
             // 
             // aboutReportSyncToolStripMenuItem
             // 
             this.aboutReportSyncToolStripMenuItem.Name = "aboutReportSyncToolStripMenuItem";
-            this.aboutReportSyncToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.aboutReportSyncToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.aboutReportSyncToolStripMenuItem.Text = "About ReportSync";
             this.aboutReportSyncToolStripMenuItem.Click += new System.EventHandler(this.aboutReportSyncToolStripMenuItem_Click);
             // 
@@ -485,6 +485,13 @@
             this.tabSourceStatus.Text = "Status";
             this.tabSourceStatus.UseVisualStyleBackColor = true;
             // 
+            // lbSourceStatus
+            // 
+            this.lbSourceStatus.Location = new System.Drawing.Point(7, 7);
+            this.lbSourceStatus.Name = "lbSourceStatus";
+            this.lbSourceStatus.Size = new System.Drawing.Size(331, 87);
+            this.lbSourceStatus.TabIndex = 0;
+            // 
             // lblSrcUrl
             // 
             this.lblSrcUrl.AutoSize = true;
@@ -659,6 +666,13 @@
             this.tabDestStatus.Text = "Status";
             this.tabDestStatus.UseVisualStyleBackColor = true;
             // 
+            // lbDestStatus
+            // 
+            this.lbDestStatus.Location = new System.Drawing.Point(3, 7);
+            this.lbDestStatus.Name = "lbDestStatus";
+            this.lbDestStatus.Size = new System.Drawing.Size(328, 94);
+            this.lbDestStatus.TabIndex = 0;
+            // 
             // lblDestUrl
             // 
             this.lblDestUrl.AutoSize = true;
@@ -694,6 +708,8 @@
             // 
             // txtDestUrl
             // 
+            //this.txtDestUrl.AccessibleDescription = "This is the webservice URL (i.e. http://<serverIPorURL>/ReportServer)";
+            //this.txtDestUrl.AccessibleName = "Destination Name";
             this.txtDestUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDestUrl.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "DestUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -712,20 +728,6 @@
             this.pbDest.Size = new System.Drawing.Size(353, 23);
             this.pbDest.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.pbDest.TabIndex = 23;
-            // 
-            // lbSourceStatus
-            // 
-            this.lbSourceStatus.Location = new System.Drawing.Point(7, 7);
-            this.lbSourceStatus.Name = "lbSourceStatus";
-            this.lbSourceStatus.Size = new System.Drawing.Size(331, 87);
-            this.lbSourceStatus.TabIndex = 0;
-            // 
-            // lbDestStatus
-            // 
-            this.lbDestStatus.Location = new System.Drawing.Point(3, 7);
-            this.lbDestStatus.Name = "lbDestStatus";
-            this.lbDestStatus.Size = new System.Drawing.Size(328, 94);
-            this.lbDestStatus.TabIndex = 0;
             // 
             // ReportSync
             // 
