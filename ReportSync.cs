@@ -240,6 +240,11 @@ namespace ReportSync
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
+            if (txtLocalPath.TextLength < 2)
+            {
+                MessageBox.Show("To download a source URL must be selected.", Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             _selectedNodeCount = 0;
             CheckTreeNodes(rptSourceTree.Nodes, false);
             bwDownload.RunWorkerAsync();
