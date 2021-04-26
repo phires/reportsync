@@ -40,6 +40,11 @@
             // 
             // dataSourcesGrid
             // 
+            this.dataSourcesGrid.AccessibleDescription = "This tool can be used to map data sources from one server no another. Tool doesn\'" +
+    "t move current data sources.";
+            this.dataSourcesGrid.AccessibleName = "Map Data Souces";
+            this.dataSourcesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataSourcesGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataSourcesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataSourcesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Source,
@@ -48,7 +53,7 @@
             this.dataSourcesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataSourcesGrid.Location = new System.Drawing.Point(0, 0);
             this.dataSourcesGrid.Name = "dataSourcesGrid";
-            this.dataSourcesGrid.Size = new System.Drawing.Size(242, 285);
+            this.dataSourcesGrid.Size = new System.Drawing.Size(529, 176);
             this.dataSourcesGrid.TabIndex = 1;
             this.dataSourcesGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataSourcesGrid_DataBindingComplete);
             // 
@@ -56,15 +61,15 @@
             // 
             this.panel1.Controls.Add(this.btnSet);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 261);
+            this.panel1.Location = new System.Drawing.Point(0, 152);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(242, 24);
+            this.panel1.Size = new System.Drawing.Size(529, 24);
             this.panel1.TabIndex = 2;
             // 
             // btnSet
             // 
             this.btnSet.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSet.Location = new System.Drawing.Point(167, 0);
+            this.btnSet.Location = new System.Drawing.Point(454, 0);
             this.btnSet.Name = "btnSet";
             this.btnSet.Size = new System.Drawing.Size(75, 24);
             this.btnSet.TabIndex = 0;
@@ -74,27 +79,34 @@
             // 
             // Source
             // 
+            this.Source.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Source.DataPropertyName = "Key";
             this.Source.HeaderText = "Source";
             this.Source.Name = "Source";
+            this.Source.Width = 66;
             // 
             // Destination
             // 
+            this.Destination.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Destination.HeaderText = "Destination";
             this.Destination.Name = "Destination";
             // 
             // Value
             // 
+            this.Value.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Value.DataPropertyName = "Value";
             this.Value.HeaderText = "Value";
             this.Value.Name = "Value";
             this.Value.Visible = false;
+            this.Value.Width = 59;
             // 
             // MapDatasources
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(242, 285);
+            this.AutoScroll = true;
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(529, 176);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataSourcesGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;

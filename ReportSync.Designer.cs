@@ -712,6 +712,8 @@
             // 
             // txtDestUrl
             // 
+            //this.txtDestUrl.AccessibleDescription = "This is the webservice URL (i.e. http://<serverIPorURL>/ReportServer)";
+            //this.txtDestUrl.AccessibleName = "Destination Name";
             this.txtDestUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDestUrl.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ReportSync.Properties.Settings.Default, "DestUrl", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));

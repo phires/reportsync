@@ -161,7 +161,7 @@ namespace ReportSync
             tabSourceSettings.SelectTab("tabSourceStatus");
             _countFolderSource = _countReportsSource = 0;
             Application.DoEvents();
-            _sourceServicesMgmt = cbSourceIntegratedAuth.Checked ? new ReportingServicesMgmt(txtSourceUrl.Text, null, null, true) : new ReportingServicesMgmt(txtSourceUrl.Text, tbSourceUser.Text, tbSourcePassword.Text, true);
+            _sourceServicesMgmt = cbSourceIntegratedAuth.Checked ? new ReportingServicesMgmt(txtSourceUrl.Text, null, null, true) : new ReportingServicesMgmt(txtSourceUrl.Text, tbSourceUser.Text, tbSourcePassword.Text, false);
             rptSourceTree.Nodes.Clear();
             rptSourceTree.BeginUpdate();
             LoadTreeNode(RootFolder, rptSourceTree.Nodes, _sourceServicesMgmt.ReportingService, true);
@@ -181,7 +181,7 @@ namespace ReportSync
             currentStatus.Text = Resources.Getting_reports__please_wait; // Updates bottom of window
             grpDest.Enabled = false;
             Application.DoEvents();
-            _destServicesMgmt = cbDestIntegratedAuth.Checked ? new ReportingServicesMgmt(txtDestUrl.Text, null, null, true) : new ReportingServicesMgmt(txtDestUrl.Text, tbDestUser.Text, tbDestPassword.Text, true);
+            _destServicesMgmt = cbDestIntegratedAuth.Checked ? new ReportingServicesMgmt(txtDestUrl.Text, null, null, true) : new ReportingServicesMgmt(txtDestUrl.Text, tbDestUser.Text, tbDestPassword.Text, false);
             rptDestTree.Nodes.Clear();
             rptDestTree.BeginUpdate();
             LoadTreeNode(RootFolder, rptDestTree.Nodes, _destServicesMgmt.ReportingService);
@@ -335,6 +335,10 @@ namespace ReportSync
 
         private void btnSync_Click(object sender, EventArgs e)
         {
+            if (txtSourceUrl.TextLength <= 2 && txtDestUrl.TextLength <= 2) {
+                MessageBox.Show("Source and Destination URL's must have values to Sync", Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             try
             {
                 _selectedNodeCount = 0;
@@ -514,6 +518,13 @@ namespace ReportSync
 
         private void mapDataSourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // This may only be needed if we're not changing the data source for a bunch of reports
+            if (_sourceServicesMgmt == _destServicesMgmt)
+            {
+                MessageBox.Show("Source/Destination folder cannot match.",Resources.Error,MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                return;
+            }
+            // End Added code
             if (_sourceServicesMgmt == null || _destServicesMgmt == null)
             {
                 MessageBox.Show(Resources.Please_load_reports_from_both_source_and_destination_server, Resources.Error,
@@ -635,6 +646,8 @@ namespace ReportSync
         private void cbDestIntegratedAuth_CheckedChanged_1(object sender, EventArgs e)
         {
             tbDestUser.Enabled = tbDestPassword.Enabled = !cbDestIntegratedAuth.Checked;
+            if (cbDestIntegratedAuth.Checked == true) { currentStatus.Text = "DestIntegradedAuth.Checked"; }
+            else { currentStatus.Text = ""; };
         }
 
         private void cbSourceIntegratedAuth_CheckedChanged_1(object sender, EventArgs e)
