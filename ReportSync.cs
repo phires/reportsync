@@ -194,9 +194,10 @@ namespace ReportSync
             }
             catch
             {
+                MessageBox.Show("Error loading url");
                 return;
             }
-            
+            currentStatus.Text = "Loading resources from " + path;
             foreach (var item in items)
             {
                 if(source)
