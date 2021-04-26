@@ -149,6 +149,11 @@ namespace ReportSync
        
         private void btnSourceLoad_Click(object sender, EventArgs e)
         {
+            if (txtSourceUrl.TextLength < 2)
+            {
+                MessageBox.Show("The url cannot be blank\nURL must look like:\nhttp://<reportURLorIP>/ReportServerSQL", Resources.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             var stopLoad = new Stopwatch();
             stopLoad.Start();
             currentStatus.Text = Resources.Getting_reports__please_wait;
