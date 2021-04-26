@@ -169,7 +169,11 @@ namespace ReportSync
 
         private void btnDestLoad_Click(object sender, EventArgs e)
         {
-            currentStatus.Text = Resources.Getting_reports__please_wait;
+            if(txtDestUrl.TextLength < 2) {
+                MessageBox.Show("The url cannot be blank\nURL must look like:\nhttp://<reportURLorIP>/ReportServerSQL", Resources.Error,MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            currentStatus.Text = Resources.Getting_reports__please_wait; // Updates bottom of window
             grpDest.Enabled = false;
             Application.DoEvents();
             _destServicesMgmt = cbDestIntegratedAuth.Checked ? new ReportingServicesMgmt(txtDestUrl.Text, null, null, true) : new ReportingServicesMgmt(txtDestUrl.Text, tbDestUser.Text, tbDestPassword.Text, true);
